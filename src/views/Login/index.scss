@@ -1,0 +1,26 @@
+.wrap{
+    min-width: 1600px;
+    height: 701px;
+    .form-wrap{
+        height: 400px;
+        width: 800px;
+        background-color: #eeeeee;
+        .form-box{
+            display: flex;
+            box-sizing: border-box;
+            height: 100%;
+            padding: 10px;
+            .form-box-left{
+                width: 50%;
+            }
+            .form-box-right{
+                width: 50%;
+                .login,
+                .register{
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
