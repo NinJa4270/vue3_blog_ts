@@ -1,14 +1,22 @@
 <template>
   <div class="home">
-    <a-button type="primary"> 登录跳转 </a-button>
+    <a-button type="primary" @click="login"> 登录跳转 </a-button>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-@Options({
-  components: {},
+import { defineComponent } from 'vue';
+import { useRouter } from "vue-router";
+
+export default defineComponent({
+  setup() {
+    const router = useRouter();
+    const login = function() {
+      router.push("/login");
+    };
+    return {
+      login,
+    };
+  }
 })
-export default class Home extends Vue {
-}
 </script>

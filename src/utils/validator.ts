@@ -26,7 +26,8 @@ export function stripscript(str?: string): string {
  * @param {string} value
  * @returns {boolean}
  */
-export function valUsername(value: string): boolean {
+export function valUsername(value?: string): boolean {
+  if(!value) return false
   let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
   return !reg.test(value) ? true : false;
 }

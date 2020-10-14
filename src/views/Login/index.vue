@@ -13,6 +13,7 @@
           占位
         </div>
         <div class="form-box-right">
+          <Tabs />
           <login class="login" />
           <!-- <register class="register" /> -->
         </div>
@@ -22,18 +23,25 @@
 </template>
 
 <script lang="ts">
-import test, { Options, Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 import login from "./components/login.vue";
 import register from "./components/register.vue";
+import Tabs from '@/components/Tabs.vue';
 @Options({
   components: {
     login,
     register,
+    Tabs
   },
 })
 export default class Login extends Vue {
   setup() {
-    return {};
+    const changeTab = (key:string)=>{
+      console.log(key)
+    }
+    return {
+      changeTab
+    };
   }
 }
 </script>

@@ -7,24 +7,15 @@
 !-->
 <template>
   <div>
-    <div>{{ book.title }}</div>
+    <div>注册</div>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
-import { Options, Vue } from "vue-class-component";
-
-export default {
-  setup() {
-    const book = reactive({ title: "Vue 3 Guide" });
-
-    return {
-      book,
-    };
-  }
-}
+import { defineComponent, reactive } from "vue";
+export default defineComponent({
+  setup() {},
+});
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
