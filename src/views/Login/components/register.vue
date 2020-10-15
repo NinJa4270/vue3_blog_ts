@@ -13,7 +13,7 @@
       :wrapper-col="formStyle.wrapperCol"
       :rules="rules"
     >
-      <a-form-item label="用户名" has-feedback name="user">
+      <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
         <a-input
           v-model:value="formData.user"
           placeholder="Username"
@@ -21,7 +21,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="密码" has-feedback name="password">
+      <a-form-item label="密码" has-feedback v-bind="validateInfos.password">
         <a-input
           v-model:value="formData.password"
           type="password"
@@ -30,16 +30,17 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="确认密码" has-feedback name="password2">
+      <a-form-item label="确认密码" has-feedback v-bind="validateInfos.password2">
         <a-input
           v-model:value="formData.password2"
+          maxlength=6
           type="password"
           placeholder="Password"
           autocomplete="off"
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="验证码" has-feedback name="code">
+      <a-form-item label="验证码" has-feedback v-bind="validateInfos.code">
         <a-input
           v-model:value="formData.code"
           placeholder="Code"
@@ -66,6 +67,7 @@ import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { stripscript, valUsername, valPassword,valCode } from "@/utils/validator.ts";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
+import { useForm } from '@ant-design-vue/use';
 
 export default defineComponent({
   setup() {
@@ -131,14 +133,18 @@ export default defineComponent({
       password2: [{ validator: validatePassword2, trigger: "change" }],
       code: [{ validator: validateCode, trigger: "change" }],
     });
-    const onSubmit = () => {
-      router.push("/");
+    const { resetFields, validate, validateInfos } = useForm(formData, rules);
+
+    const onSubmit = (e:any) => {
+      e.preventDefault();
+        validate().then(() => {
+          router.push("/");
+        }).catch(err => {
+          console.log('error', err);
+        });
     };
     const resetForm = () => {
-      formData.user = ""
-      formData.password = ""
-      formData.password2 = ""
-      formData.code = ""
+      resetFields()
     }
     return {
       formStyle: {
@@ -148,7 +154,8 @@ export default defineComponent({
       formData,
       rules,
       onSubmit,
-      resetForm
+      resetForm,
+      validateInfos
     };
   },
 });
