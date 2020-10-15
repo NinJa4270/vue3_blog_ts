@@ -13,7 +13,7 @@
       :wrapper-col="formStyle.wrapperCol"
       :rules="rules"
     >
-      <a-form-item label="用户名" has-feedback name="user">
+      <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
         <a-input
           v-model:value="formData.user"
           placeholder="Username"
@@ -21,7 +21,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="密码" has-feedback name="password">
+      <a-form-item label="密码" has-feedback v-bind="validateInfos.password">
         <a-input
           v-model:value="formData.password"
           type="password"
@@ -30,10 +30,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item
-        :wrapper-col="{ offset: 5, span: 18 }"
-        style="margin-bottom:10px;"
-      >
+      <a-form-item :wrapper-col="{ offset: 5, span: 18 }">
         <div style="display:flex;justify-content: space-between;">
           <a-checkbox v-model:checked="checked">
             记住密码
@@ -48,7 +45,7 @@
           <a-button type="primary" @click="onSubmit">
             登 陆
           </a-button>
-          <a-button>
+          <a-button @click="resetForm">
             重 置
           </a-button>
         </div>
@@ -58,38 +55,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, } from "vue";
+import { defineComponent, onMounted, reactive, Ref, ref } from "vue";
 import { stripscript, valUsername, valPassword } from "@/utils/validator.ts";
-import { useRouter } from 'vue-router';
-import { setStorage,getStorage } from '@/utils/storage.ts'
-import store from '@/store';
-interface loginForm {
-  user?: string;
-  password?: string;
-}
-interface ruleFn {
-  (rule: [], callback: () => Promise<void>): Promise<void>;
-}
-interface rulesObj {
-  user: any[];
-  password: any[];
-}
+import { useRouter } from "vue-router";
+import { setStorage, getStorage } from "@/utils/storage.ts";
+import store from "@/store";
+import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
+import { useForm } from '@ant-design-vue/use';
 
 export default defineComponent({
   setup(props, ctx) {
-    const router = useRouter()
+    const router = useRouter();
     const checked = ref(false);
     // 表单数据// 判断是否存在登陆记录
-    const formData: loginForm = reactive(getStorage('userInfo')?getStorage('userInfo'):{
-      user: "",
-      password: "",
-    });
+    const formData: LoginForm = reactive(
+      {
+        user: "",
+        password: "",
+      }
+    );
     // 自定义表单验证
     /**
      * @bug value无法正确获取  需要手动赋值
      * @example value = formData.user
      */
-    let validateUsername: ruleFn = (rule, callback) => {
+    let validateUsername: RuleFn = (rule, callback) => {
       let value = formData.user;
       if (value === "") {
         return Promise.reject("用户名不能为空");
@@ -100,9 +90,9 @@ export default defineComponent({
         return Promise.resolve();
       }
     };
-    let validatePassword: ruleFn = (rule, callback) => {
+    let validatePassword: RuleFn = (rule, callback) => {
       // 过滤特殊字符
-      formData.password = stripscript(formData.password);
+      formData.password = stripscript(formData.password as string);
       let value = formData.password;
       if (value === "") {
         return Promise.reject("密码不能为空");
@@ -112,19 +102,36 @@ export default defineComponent({
         return Promise.resolve();
       }
     };
-    const rules: rulesObj = reactive({
+    const rules: RulesObj = reactive({
       user: [{ validator: validateUsername, trigger: "change" }],
       password: [{ validator: validatePassword, trigger: "change" }],
     });
-    const onSubmit = ()=>{
-      if(checked.value){
-        // 储存到localStorage中
-        setStorage('userInfo',formData)
-      }
-      // 储存到vuex
-      store.commit('SET_USERINFO',formData)
-      router.push('/')
+
+    const { resetFields, validate, validateInfos } = useForm(formData, rules);
+
+    const onSubmit = (e:any) => {
+        e.preventDefault();
+        validate().then(() => {
+          if (checked.value) {
+          // 储存到localStorage中
+            setStorage("userInfo", formData);
+          }
+          // 储存到vuex
+          store.commit("SET_USERINFO", formData);
+          router.push("/");
+        }).catch(err => {
+          console.log('error', err);
+        });
     };
+    const resetForm = () => {
+      resetFields()
+    };
+    onMounted:{
+      if(getStorage("userInfo")){
+        formData.user = getStorage("userInfo").user
+        formData.password = getStorage("userInfo").password
+      }
+    }
     return {
       checked,
       // 表单样式
@@ -135,6 +142,8 @@ export default defineComponent({
       formData,
       rules,
       onSubmit,
+      resetForm,
+      validateInfos
     };
   },
 });

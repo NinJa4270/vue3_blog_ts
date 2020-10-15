@@ -13,9 +13,9 @@
           占位
         </div>
         <div class="form-box-right">
-          <Tabs />
-          <login class="login" />
-          <!-- <register class="register" /> -->
+          <Tabs height="30" width="350" :list="list" :activeIndex="0" @changeActive="changeActive" />
+          <login v-if="activeIndex === 0" class="login" />
+          <register v-else class="register" />
         </div>
       </div>
     </div>
@@ -23,27 +23,27 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import login from "./components/login.vue";
 import register from "./components/register.vue";
-import Tabs from '@/components/Tabs.vue';
-@Options({
-  components: {
-    login,
-    register,
-    Tabs
+import Tabs from "@/components/Tabs.vue";
+import { defineComponent, reactive, ref } from 'vue';
+
+export default defineComponent({
+  components:{
+    login,register,Tabs
   },
-})
-export default class Login extends Vue {
-  setup() {
-    const changeTab = (key:string)=>{
-      console.log(key)
+  setup(){
+    let activeIndex = ref(0)
+    const changeActive = (index:number)=>{
+      activeIndex.value = index
     }
     return {
-      changeTab
-    };
+      activeIndex,
+      list:['登陆','注册'],
+      changeActive
+    }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

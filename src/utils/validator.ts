@@ -6,10 +6,7 @@
  * @param {string} str
  * @return {string}
  */
-export function stripscript(str?: string): string {
-  if(!str){
-    return ''
-  }
+export function stripscript(str: string): string {
   let pattern = new RegExp(
     "[`~!@#$^&*()=|{}':;',\\[\\]%<>/?~！@#￥……&*（）&;—|{ }【】‘；：”“'。，、？]"
   );
@@ -27,9 +24,8 @@ export function stripscript(str?: string): string {
  * @returns {boolean}
  */
 export function valUsername(value?: string): boolean {
-  if(!value) return false
   let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-  return !reg.test(value) ? true : false;
+  return !reg.test(value as string) ? true : false;
 }
 
 /**
@@ -41,5 +37,11 @@ export function valUsername(value?: string): boolean {
  */
 export function valPassword(value: string): boolean {
   let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
-  return !reg.test(value) ? true : false;
+  return !reg.test(value as string) ? true : false;
+}
+
+// 验证验证码
+export function valCode(value:string):boolean {
+  let reg = /^[a-zA-Z0-9]{6}$/
+  return !reg.test(value as string) ? true : false
 }

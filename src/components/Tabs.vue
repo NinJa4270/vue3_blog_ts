@@ -7,7 +7,11 @@
 <template>
   <div
     class="tabs"
-    :style="[{ background: background }, { height: `${height}px` }]"
+    :style="[
+      { background: background },
+      { height: `${height}px` },
+      { width: `${width}px` },
+    ]"
   >
     <div
       class="tabs-item"
@@ -27,9 +31,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, reactive, ref } from "vue";
+import { defineComponent, nextTick, onMounted, reactive ,ref} from "vue";
 export default defineComponent({
   props: {
+    width: {
+      type: [String, Number],
+    },
     height: {
       type: [String, Number],
       default: "50",
@@ -52,23 +59,25 @@ export default defineComponent({
     },
     activeColor: {
       type: String,
-      default: "#1890ff",
+      default: "#FFFFFF",
     },
     activeBg: {
       type: String,
-      default: "#FFFFFF",
+      default: "#1890ff",
     },
     defaultColor: {
       type: String,
-      default: "#050",
+      default: "#1890ff",
     },
     defaultBg: {
       type: String,
-      default: "#fff000",
+      default: "#FFFFFF",
     },
   },
-  setup(props, ctx) {
-    const changeActive = (index: number|string): void => {
+  setup(props, { emit }) {
+    let componentIndex= ref(-1)
+    const changeActive = (index: number | string): void => {
+      if(componentIndex.value === index) return
       let arr: any = document.getElementsByClassName("tabs-item");
       let acitveEle = arr[index];
       for (let i = 0; i < arr.length; i++) {
@@ -77,11 +86,13 @@ export default defineComponent({
       }
       acitveEle.style.color = props.activeColor;
       acitveEle.style.backgroundColor = props.activeBg;
+      emit("changeActive", index);
+      componentIndex.value = index as number
     };
-    onMounted:{
-      nextTick(()=>{
-        changeActive(props.activeIndex)
-      })
+    onMounted: {
+      nextTick(() => {
+        changeActive(props.activeIndex);
+      });
     }
     return {
       changeActive,
