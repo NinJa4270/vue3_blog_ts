@@ -55,25 +55,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, Ref, ref } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  Ref,
+  ref,
+  getCurrentInstance,
+} from "vue";
 import { stripscript, valUsername, valPassword } from "@/utils/validator.ts";
 import { useRouter } from "vue-router";
 import { setStorage, getStorage } from "@/utils/storage.ts";
 import store from "@/store";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
-import { useForm } from '@ant-design-vue/use';
+import { useForm } from "@ant-design-vue/use";
+import server from '@/utils/axios'
 
 export default defineComponent({
   setup(props, ctx) {
+    // SetupContext<EmitsOptions>
     const router = useRouter();
     const checked = ref(false);
+    // console.log(ctx.root)
     // 表单数据// 判断是否存在登陆记录
-    const formData: LoginForm = reactive(
-      {
-        user: "",
-        password: "",
-      }
-    );
+    const formData: LoginForm = reactive({
+      user: "",
+      password: "",
+    });
     // 自定义表单验证
     /**
      * @bug value无法正确获取  需要手动赋值
@@ -109,27 +117,31 @@ export default defineComponent({
 
     const { resetFields, validate, validateInfos } = useForm(formData, rules);
 
-    const onSubmit = (e:any) => {
-        e.preventDefault();
-        validate().then(() => {
+    const onSubmit = (e: any) => {
+      e.preventDefault();
+      validate()
+        .then(async () => {
+          let res = await server.request({url:'/api/register',method: 'post',})
+          console.log(res)
           if (checked.value) {
-          // 储存到localStorage中
+            // 储存到localStorage中
             setStorage("userInfo", formData);
           }
           // 储存到vuex
           store.commit("SET_USERINFO", formData);
           router.push("/");
-        }).catch(err => {
-          console.log('error', err);
+        })
+        .catch((err) => {
+          console.log("error", err);
         });
     };
     const resetForm = () => {
-      resetFields()
+      resetFields();
     };
-    onMounted:{
-      if(getStorage("userInfo")){
-        formData.user = getStorage("userInfo").user
-        formData.password = getStorage("userInfo").password
+    onMounted: {
+      if (getStorage("userInfo")) {
+        formData.user = getStorage("userInfo").user;
+        formData.password = getStorage("userInfo").password;
       }
     }
     return {
@@ -143,7 +155,7 @@ export default defineComponent({
       rules,
       onSubmit,
       resetForm,
-      validateInfos
+      validateInfos,
     };
   },
 });

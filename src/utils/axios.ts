@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { message } from 'ant-design-vue';
-import { getStorage } from "./storage";
-const baseUrl = process.env.VUE_APP_BASE_URL
+// import { getStorage } from "./storage";
+const baseUrl = process.env.BASE_URL
+console.log(baseUrl)
 
 interface Config {
   baseURL?:string,

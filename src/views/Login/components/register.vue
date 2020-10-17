@@ -89,14 +89,15 @@ import {
 } from "@/utils/validator.ts";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
 import { useForm } from "@ant-design-vue/use";
+import server from '@/utils/axios'
 
 export default defineComponent({
   setup() {
     const formData: LoginForm = reactive({
-      user: "",
-      password: "",
-      password2: "",
-      code: "",
+      user: "17398081021@163.com",
+      password: "12345678yq",
+      password2: "12345678yq",
+      code: "123456",
     });
     const router = useRouter();
     const btnStatus = reactive({
@@ -164,7 +165,9 @@ export default defineComponent({
     const onSubmit = (e: Event) => {
       e.preventDefault();
       validate()
-        .then(() => {
+        .then(async() => {
+          let res = await server.request({url:'/api/register',method: 'post',data:{...formData}})
+          console.log(res)
           router.push("/");
         })
         .catch((err) => {
