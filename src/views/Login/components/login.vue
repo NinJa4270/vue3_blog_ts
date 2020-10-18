@@ -121,8 +121,8 @@ export default defineComponent({
       e.preventDefault();
       validate()
         .then(async () => {
-          let res = await server.request({url:'/api/register',method: 'post',})
-          console.log(res)
+          // let res = await server.request({url:'/api/register',method: 'post',})
+          // console.log(res)
           if (checked.value) {
             // 储存到localStorage中
             setStorage("userInfo", formData);

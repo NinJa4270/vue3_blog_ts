@@ -89,7 +89,7 @@ import {
 } from "@/utils/validator.ts";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
 import { useForm } from "@ant-design-vue/use";
-import server from '@/utils/axios'
+import server from "@/utils/axios";
 
 export default defineComponent({
   setup() {
@@ -165,9 +165,13 @@ export default defineComponent({
     const onSubmit = (e: Event) => {
       e.preventDefault();
       validate()
-        .then(async() => {
-          let res = await server.request({url:'/api/register',method: 'post',data:{...formData}})
-          console.log(res)
+        .then(async () => {
+          let res = await server.request({
+            url: "/api/register",
+            method: "post",
+            data: { ...formData },
+          });
+          console.log(res);
           router.push("/");
         })
         .catch((err) => {
@@ -215,7 +219,7 @@ export default defineComponent({
       }, 1000);
     };
     // 清除定时器
-    const clearCountDown = (timer:Ref) => {
+    const clearCountDown = (timer: Ref) => {
       clearInterval(timer.value);
     };
     return {
