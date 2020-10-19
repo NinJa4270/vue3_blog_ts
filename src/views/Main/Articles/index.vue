@@ -9,13 +9,11 @@
     <div class="title">文章列表</div>
     <div class="info">
       <div class="sort">
-        <div class="sort-item">
-          <CaretDownOutlined />
-            时间最近
-          </div>
-        <div class="sort-item"><CaretUpOutlined />点赞最多</div>
-        <div class="sort-item"><CaretUpOutlined />观看最多</div>
-        <div class="sort-item"><CaretUpOutlined />评论最多</div>
+        <!-- <Sort class="sort-item" v-model:active="active" label="时间最近" />
+        <Sort class="sort-item" abel="点赞最多" />
+        <Sort class="sort-item" label="观看最多" />
+        <Sort class="sort-item" label="评论最多" /> -->
+        <Sort class="sort-item" v-for="item in sortList" :key="item.id" :label="item.label" v-model:active="item.active" />
       </div>
       <div class="total">
         <FolderOutlined />
@@ -31,6 +29,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import Article from "./components/Article.vue";
+import Sort from "@/components/Sort.vue";
 import {
   FolderOutlined,
   CaretUpOutlined,
@@ -40,12 +39,21 @@ export default defineComponent({
   name: "Articles",
   components: {
     Article,
+    Sort,
     FolderOutlined,
     CaretUpOutlined,
     CaretDownOutlined,
   },
   setup() {
-    return {};
+    const sortList = reactive([
+      {id:'sort0',label:'时间最近',active:0},
+      {id:'sort1',label:'点赞最多',active:1},
+      {id:'sort2',label:'观看最多',active:1},
+      {id:'sort3',label:'评论最多',active:1},
+    ])
+    return {
+      sortList
+    };
   },
 });
 </script>
