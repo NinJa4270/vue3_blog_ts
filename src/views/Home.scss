@@ -1,19 +1,11 @@
 .home-wrap {
   position: relative;
-  min-height: 100vh;
   background-image: url('../assets//img/bg01.png');
-  .header{
-    width: 100%;
-    top: 0;
-    position: fixed;
-    box-sizing: border-box;
-    border: 1px solid transparent;
-    z-index: 1;
-  }
+
   .content {
-    min-height: 200vh;
+    min-height: calc(100vh - 140px);
     max-width: 1200px;
-    margin: 60px auto;
+    margin: 0 auto ;
     #kobe {
       width: 240px;
       height: 200px;
@@ -23,10 +15,7 @@
       z-index: -988;
     }
   }
-  .footer {
-    width: 100%;
-    position: absolute;
-    bottom: -60px;
-    left: 0;
+  .footer{
+    
   }
 }
