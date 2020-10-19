@@ -182,12 +182,21 @@ export default defineComponent({
       resetFields();
     };
 
-    const getCode = () => {
+    const getCode = async () => {
+      if(!formData.user){
+        return
+      }
       updateStatus({
         loading: true,
         disabled: true,
         text: "发送中",
       });
+      let res = await server.request({
+        url: "/api/nodemailer",
+        method: "post",
+        data: { user: formData.user},
+      });
+      console.log(res)
       countDown(60);
     };
     const updateStatus = (data: typeof btnStatus) => {

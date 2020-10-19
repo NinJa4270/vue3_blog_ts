@@ -34,7 +34,7 @@ class Request {
     instance.interceptors.response.use(
       res => {
         let data = res.data
-        if (data.rescode !== 0) {
+        if (data.code !== 1000) {
           message.error(data.msg)
           return Promise.reject(data)
         } else {
