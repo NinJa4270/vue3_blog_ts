@@ -14,9 +14,6 @@
       </div>
     </div>
     <div class="info">
-      <!-- <div class="sort">
-        <Sort class="sort-item" v-for="item in sortList" :key="item.id" :label="item.label" v-model:active="item.active" />
-      </div> -->
       <div class="total">
         <FolderOutlined />
         <span>文章总数</span>

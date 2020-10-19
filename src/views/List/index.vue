@@ -5,16 +5,37 @@
 !-->
 <template>
   <div class="list-wrap">
-    <div class="breadcrumb">
-      <a-breadcrumb>
-        <a-breadcrumb-item href="">
-          <home-outlined />
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>
-          文章列表
-        </a-breadcrumb-item>
-      </a-breadcrumb>
+    <Breadcrumb class="breadcrumb" label="文章列表" />
+    <!-- 排序 筛选 -->
+    <div class="picker">
+      <div class="select">
+        <div>分类：</div>
+        <a-select v-model:value="value1" style="width: 120px" ref="select">
+          <a-select-option value="jack">
+            Jack
+          </a-select-option>
+          <a-select-option value="lucy">
+            Lucy
+          </a-select-option>
+          <a-select-option value="disabled" disabled>
+            Disabled
+          </a-select-option>
+          <a-select-option value="Yiminghe">
+            yiminghe
+          </a-select-option>
+        </a-select>
+      </div>
+      <div class="sort">
+        <Sort
+          class="sort-item"
+          v-for="item in sortList"
+          :key="item.id"
+          :label="item.label"
+          v-model:active="item.active"
+        />
+      </div>
     </div>
+    <a-divider />
     <a-list
       item-layout="vertical"
       size="large"
@@ -54,15 +75,17 @@ import {
   StarOutlined,
   LikeOutlined,
   MessageOutlined,
-  HomeOutlined,
 } from "@ant-design/icons-vue";
+import Sort from "@/components/Sort.vue";
+import Breadcrumb from "@/components/Breadcrumb.vue";
 export default defineComponent({
   name: "list",
   components: {
     StarOutlined,
     LikeOutlined,
     MessageOutlined,
-    HomeOutlined
+    Breadcrumb,
+    Sort,
   },
   setup() {
     const listData = [];
@@ -78,7 +101,16 @@ export default defineComponent({
           "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
       });
     }
+    const sortList = reactive([
+      { id: "sort0", label: "时间最近", active: 0 },
+      { id: "sort1", label: "点赞最多", active: 1 },
+      { id: "sort2", label: "观看最多", active: 1 },
+      { id: "sort3", label: "评论最多", active: 1 },
+    ]);
+    const value1 = ref("lucy");
     return {
+      value1,
+      sortList,
       listData,
       pagination: {
         onChange: () => {},
