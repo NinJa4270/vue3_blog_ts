@@ -15,14 +15,13 @@
   >
     <div
       class="tabs-item"
-      v-for="(item, index) in list"
-      :key="index"
       :style="[
-        { color: defaultColor },
-        { background: defaultBg },
         { lineHeight: `${height}px` },
         { fontSize: `${fontSize}px` },
       ]"
+      :class="{ active: activeIndex === index }"
+      v-for="(item, index) in list"
+      :key="index"
       @click="changeActive(index)"
     >
       {{ item }}
@@ -31,9 +30,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, reactive ,ref} from "vue";
+import { defineComponent, nextTick, onMounted, reactive, ref } from "vue";
 export default defineComponent({
   props: {
+    list: {
+      type: Array,
+      default: () => ["list1", "list2", "list3"],
+    },
+    activeIndex: Number,
+    default: () => {
+      return 0;
+    },
     width: {
       type: [String, Number],
     },
@@ -41,59 +48,20 @@ export default defineComponent({
       type: [String, Number],
       default: "50",
     },
-    fontSize: {
-      type: [String, Number],
-      default: "15",
-    },
     background: {
       type: String,
       default: "#FFFFFF",
     },
-    list: {
-      type: Array,
-      default: ["table-1", "table-2", "table-3"],
-    },
-    activeIndex: {
+    fontSize: {
       type: [String, Number],
-      default: 0,
-    },
-    activeColor: {
-      type: String,
-      default: "#FFFFFF",
-    },
-    activeBg: {
-      type: String,
-      default: "#1890ff",
-    },
-    defaultColor: {
-      type: String,
-      default: "#1890ff",
-    },
-    defaultBg: {
-      type: String,
-      default: "#FFFFFF",
+      default: "15",
     },
   },
+  emits: ["update:activeIndex"],
   setup(props, { emit }) {
-    let componentIndex= ref(-1)
-    const changeActive = (index: number | string): void => {
-      if(componentIndex.value === index) return
-      let arr: any = document.getElementsByClassName("tabs-item");
-      let acitveEle = arr[index];
-      for (let i = 0; i < arr.length; i++) {
-        arr[i].style.color = props.defaultColor;
-        arr[i].style.backgroundColor = props.defaultBg;
-      }
-      acitveEle.style.color = props.activeColor;
-      acitveEle.style.backgroundColor = props.activeBg;
-      emit("changeActive", index);
-      componentIndex.value = index as number
+    const changeActive = (index: number) => {
+      emit("update:activeIndex", index);
     };
-    onMounted: {
-      nextTick(() => {
-        changeActive(props.activeIndex);
-      });
-    }
     return {
       changeActive,
     };
@@ -111,8 +79,8 @@ export default defineComponent({
     cursor: pointer;
   }
   .active {
-    background-color: #ffffff !important;
-    color: #000 !important;
+    background-color: #1890ff !important;
+    color: #FFFFFF !important;
   }
 }
 </style>

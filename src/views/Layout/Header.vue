@@ -16,7 +16,7 @@
     <div class="info">
       <div class="menu">
         <a-dropdown>
-          <span class="menu-item"  @click="(e) => e.preventDefault()">
+          <span class="menu-item" @click="(e) => e.preventDefault()">
             Hover me <DownOutlined />
           </span>
           <template v-slot:overlay>
@@ -35,11 +35,8 @@
         </a-dropdown>
       </div>
       <div class="login-btns">
-        <a-button type="link" size="large" ghost>
+        <a-button type="link" size="large" ghost @click="login">
           登录
-        </a-button>
-        <a-button type="link" size="large" ghost>
-          注册
         </a-button>
       </div>
     </div>
@@ -48,17 +45,23 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { DownOutlined } from '@ant-design/icons-vue';
+import { DownOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "Header",
-  components:{
-    DownOutlined
+  components: {
+    DownOutlined,
   },
   setup() {
+    const router = useRouter();
     // 未来根据接口显示
     const logo = ref(require("../../assets/img/logo.jpg"));
+    const login = () => {
+      router.push("./login");
+    };
     return {
       logo,
+      login
     };
   },
 });

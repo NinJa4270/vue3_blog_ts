@@ -10,15 +10,15 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/main',
         name: 'main',
-        component: () => import(/* webpackChunkName: "Home" */ '../views/Main.vue')
+        component: () => import(/* webpackChunkName: "Home" */ '../views/Main/Main.vue')
       },
-      {
-        path: '/login',
-        name: 'Login',
-        component: () => import(/* webpackChunkName: "Login" */ '../views/Login/index.vue')
-      }
     ]
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "Login" */ '../views/Login/index.vue')
+  }
 ]
 
 const router = createRouter({

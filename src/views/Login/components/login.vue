@@ -129,7 +129,7 @@ export default defineComponent({
           }
           // 储存到vuex
           store.commit("SET_USERINFO", formData);
-          router.push("/");
+          router.push("/main");
         })
         .catch((err) => {
           console.log("error", err);

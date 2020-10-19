@@ -1,0 +1,22 @@
+.articles-wrap {
+  .title {
+    font-size: 20px;
+  }
+  .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .sort {
+      display: flex;
+      // justify-content: space-evenly;
+      align-items: center;
+      .sort-item {
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+      .sort-item:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}

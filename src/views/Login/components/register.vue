@@ -172,7 +172,7 @@ export default defineComponent({
             data: { ...formData },
           });
           console.log(res);
-          router.push("/");
+          router.push("/main");
         })
         .catch((err) => {
           console.log("error", err);

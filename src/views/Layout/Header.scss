@@ -1,24 +1,24 @@
 .header-wrap {
-    height: 100px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 40px;
-    background-color: rgba(233, 206, 206, 0.048);
+    background-color:#1d1d1d;
     .logo {
         display: flex;
         align-items: center;
 
         .logo-img {
-            height: 80px;
-            width: 80px;
+            height: 40px;
+            width: 40px;
             border-radius: 50%;
         }
 
         .logo-text {
             color: #FFFFFF;
             margin-left: 40px;
-            font-size: 40px;
+            font-size: 20px;
             font-weight: bold;
             letter-spacing: 2px;
             user-select: none;
