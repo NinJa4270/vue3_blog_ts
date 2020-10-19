@@ -63,7 +63,7 @@
     </p>
     <a-divider />
     <div class="all">
-      查看全部
+      <span>查看全部</span>
       <MoreOutlined />
     </div>
   </div>
