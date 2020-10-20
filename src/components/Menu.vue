@@ -6,7 +6,7 @@
 <template>
   <a-dropdown>
     <span class="menu-item" @click="(e) => e.preventDefault()">
-      导航 <DownOutlined />
+      {{ title }} <DownOutlined />
     </span>
     <template v-slot:overlay>
       <a-menu>
@@ -46,6 +46,10 @@ export default defineComponent({
           label: "菜单3",
         },
       ],
+    },
+    title: {
+      type: String,
+      default: "导航",
     },
   },
   setup() {

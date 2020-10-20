@@ -14,7 +14,10 @@
       </div>
     </div>
     <div class="info">
-      <Menu class="menu" :list="list" />
+      <Menu class="menu" title="审核管理" :list="adminUserList" />
+      <Menu class="menu" title="用户管理" :list="adminUserList" />
+      <Menu class="menu" title="文章管理" :list="adminArticleList" />
+      <Menu class="menu" title="导航" :list="mainList" />
       <div class="login-btns" v-if="store.state.status !== 1">
         <a-button type="link" size="large" ghost @click="login">
           登录
@@ -75,7 +78,7 @@ export default defineComponent({
       router.push("./center");
     };
     return {
-      list: [
+      mainList: [
         {
           id: "menu1",
           label: "首页",
@@ -90,6 +93,30 @@ export default defineComponent({
           id: "menu3",
           label: "个人中心",
           path:'/center'
+        },
+      ],
+      adminArticleList:[
+        {
+          id: "menu1",
+          label: "新建文章",
+          path:'/addArticle'
+        },
+        {
+          id: "menu2",
+          label: "管理文章",
+          path:'/articleList'
+        },
+      ],
+      adminUserList:[
+        {
+          id: "menu1",
+          label: "编辑用户",
+          path:'/addArticle'
+        },
+        {
+          id: "menu2",
+          label: "用户管理",
+          path:'/articleList'
         },
       ],
       store,
