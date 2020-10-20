@@ -19,8 +19,8 @@
             v-model:activeIndex="activeIndex"
             :list="list"
           />
-          <login v-if="activeIndex === 0" class="login" />
-          <register v-else class="register" />
+          <Login v-if="activeIndex === 0" class="login" />
+          <Register v-else v-model:activeIndex="activeIndex" class="register" />
         </div>
       </div>
     </div>
@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import login from "./components/login.vue";
-import register from "./components/register.vue";
+import Login from "./components/Login.vue";
+import Register from "./components/Register.vue";
 import Tabs from "@/components/Tabs.vue";
 import {
   defineComponent,
@@ -43,8 +43,8 @@ import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
-    login,
-    register,
+    Login,
+    Register,
     Tabs,
   },
   setup() {

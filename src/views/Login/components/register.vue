@@ -90,14 +90,23 @@ import {
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
 import { useForm } from "@ant-design-vue/use";
 import server from "@/utils/axios";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
-  setup() {
+  name: "Register",
+  emits: ["update:activeIndex"],
+  props:{
+    activeIndex:{
+      type:Number,
+      default:1
+    }
+  },
+  setup(props, { emit }) {
     const formData: LoginForm = reactive({
-      user: "17398081021@163.com",
-      password: "12345678yq",
-      password2: "12345678yq",
-      code: "123456",
+      user: "",
+      password: "",
+      password2: "",
+      code: "",
     });
     const router = useRouter();
     const btnStatus = reactive({
@@ -105,6 +114,7 @@ export default defineComponent({
       disabled: false,
       text: "验证码",
     });
+
     let validateUsername: RuleFn = (rule, callback) => {
       let value = formData.user;
       if (value === "") {
@@ -128,7 +138,6 @@ export default defineComponent({
         return Promise.resolve();
       }
     };
-
     let validatePassword2: RuleFn = (rule, callback) => {
       formData.password2 = stripscript(formData.password2 as string);
       let value = formData.password2;
@@ -142,7 +151,6 @@ export default defineComponent({
         return Promise.resolve();
       }
     };
-
     let validateCode: RuleFn = (rule, callback) => {
       let value = formData.code;
       if (value === "") {
@@ -171,10 +179,11 @@ export default defineComponent({
             method: "post",
             data: { ...formData },
           });
-          console.log(res);
-          router.push("/main");
+          message.success("注册成功");
+          emit('update:activeIndex',0)
         })
         .catch((err) => {
+          message.error("发生异常");
           console.log("error", err);
         });
     };
@@ -183,8 +192,8 @@ export default defineComponent({
     };
 
     const getCode = async () => {
-      if(!formData.user){
-        return
+      if (!formData.user) {
+        return;
       }
       updateStatus({
         loading: true,
@@ -194,9 +203,8 @@ export default defineComponent({
       let res = await server.request({
         url: "/api/nodemailer",
         method: "post",
-        data: { user: formData.user},
+        data: { user: formData.user },
       });
-      console.log(res)
       countDown(60);
     };
     const updateStatus = (data: typeof btnStatus) => {
@@ -249,5 +257,5 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "./register.scss";
+@import "./Register.scss";
 </style>

@@ -70,8 +70,10 @@ import store from "@/store";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
 import { useForm } from "@ant-design-vue/use";
 import server from '@/utils/axios'
+import { message } from "ant-design-vue";
 
 export default defineComponent({
+  name:'Login',
   setup(props, ctx) {
     // SetupContext<EmitsOptions>
     const router = useRouter();
@@ -121,8 +123,12 @@ export default defineComponent({
       e.preventDefault();
       validate()
         .then(async () => {
-          // let res = await server.request({url:'/api/register',method: 'post',})
-          // console.log(res)
+          let res = await server.request({
+            url: "/api/login",
+            method: "post",
+            data: { ...formData },
+          });
+          message.success("登陆成功");
           if (checked.value) {
             // 储存到localStorage中
             setStorage("userInfo", formData);
@@ -162,5 +168,5 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "./login.scss";
+@import "./Login.scss";
 </style>
