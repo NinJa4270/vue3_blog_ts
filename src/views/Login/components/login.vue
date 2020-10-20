@@ -66,19 +66,18 @@ import {
 import { stripscript, valUsername, valPassword } from "@/utils/validator.ts";
 import { useRouter } from "vue-router";
 import { setStorage, getStorage } from "@/utils/storage.ts";
-import store from "@/store";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
 import { useForm } from "@ant-design-vue/use";
 import server from '@/utils/axios'
 import { message } from "ant-design-vue";
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name:'Login',
   setup(props, ctx) {
-    // SetupContext<EmitsOptions>
+    const store = useStore()
     const router = useRouter();
     const checked = ref(false);
-    // console.log(ctx.root)
     // 表单数据// 判断是否存在登陆记录
     const formData: LoginForm = reactive({
       user: "",
@@ -135,6 +134,7 @@ export default defineComponent({
           }
           // 储存到vuex
           store.commit("SET_USERINFO", formData);
+          store.commit("SET_STATUS", 1);
           router.push("/main");
         })
         .catch((err) => {

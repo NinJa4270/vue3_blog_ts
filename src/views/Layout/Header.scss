@@ -1,44 +1,61 @@
 .header-wrap {
-    height: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background-color: #1d1d1d;
+  .logo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    background-color:#1d1d1d;
-    .logo {
-        display: flex;
-        align-items: center;
 
-        .logo-img {
-            height: 40px;
-            width: 40px;
-            border-radius: 50%;
-        }
-
-        .logo-text {
-            color: #FFFFFF;
-            margin-left: 40px;
-            font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            user-select: none;
-        }
+    .logo-img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
     }
 
-    .info {
+    .logo-text {
+      color: #ffffff;
+      margin-left: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+
+    .menu {
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-btns {
+      margin-left: 40px;
+    }
+
+    .user-info {
+      margin-left: 40px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      .user-box {
         display: flex;
         align-items: center;
-
-        .menu {
-            color:#FFF;
-            font-size: 20px;
-            .menu-item{
-                cursor: pointer;
-            }
+        .avatar {
+          height: 30px;
+          width: 30px;
         }
-
-        .login-btns {
-            margin-left: 40px;
+        .user-name {
+          margin: 0 20px;
         }
+      }
     }
+  }
 }

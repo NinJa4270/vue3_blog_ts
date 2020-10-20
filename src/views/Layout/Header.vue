@@ -14,54 +14,89 @@
       </div>
     </div>
     <div class="info">
-      <div class="menu">
-        <a-dropdown>
-          <span class="menu-item" @click="(e) => e.preventDefault()">
-            Hover me <DownOutlined />
-          </span>
-          <template v-slot:overlay>
-            <a-menu>
-              <a-menu-item>
-                <a href="javascript:;">1st menu item</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">2nd menu item</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">3rd menu item</a>
-              </a-menu-item>
-            </a-menu>
-          </template>
-        </a-dropdown>
-      </div>
-      <div class="login-btns">
+      <Menu class="menu" :list="list" />
+      <div class="login-btns" v-if="store.state.status !== 1">
         <a-button type="link" size="large" ghost @click="login">
           登录
         </a-button>
+      </div>
+      <div class="user-info" v-else>
+        <a-popover class="user-box">
+          <template v-slot:content>
+            <span @click="goCenter" style="cursor: pointer;">个人中心</span>
+          </template>
+          <img
+            class="avatar"
+            src="../../assets/img/avatar.png"
+            alt="用户头像"
+            srcset=""
+          />
+          <div class="user-name">
+            {{ store.state.userInfo.user }}
+          </div>
+        </a-popover>
+        <LogoutOutlined :style="{ fontSize: '30px' }" @click="logout" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import { DownOutlined } from "@ant-design/icons-vue";
+import { computed, defineComponent, reactive, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { message } from "ant-design-vue";
+import { LogoutOutlined } from "@ant-design/icons-vue";
+import Menu from "@/components/Menu.vue";
+
 export default defineComponent({
   name: "Header",
   components: {
-    DownOutlined,
+    Menu,
+    LogoutOutlined,
   },
+
   setup() {
     const router = useRouter();
+    const store = useStore();
     // 未来根据接口显示
     const logo = ref(require("../../assets/img/logo.jpg"));
     const login = () => {
       router.push("./login");
     };
+    const logout = () => {
+      message.success("登出成功");
+      store.commit("SET_USERINFO", { user: "", password: "" });
+      store.commit("SET_STATUS", 0);
+      // 调用登出接口
+      router.push("./main");
+    };
+    const goCenter = () => {
+      router.push("./center");
+    };
     return {
+      list: [
+        {
+          id: "menu1",
+          label: "首页",
+          path:'/main'
+        },
+        {
+          id: "menu2",
+          label: "文章列表",
+          path:'/list'
+        },
+        {
+          id: "menu3",
+          label: "个人中心",
+          path:'/center'
+        },
+      ],
+      store,
       logo,
-      login
+      login,
+      logout,
+      goCenter,
     };
   },
 });
