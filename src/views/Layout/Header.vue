@@ -15,6 +15,7 @@
     </div>
     <div class="info">
       <Menu class="menu" title="审核管理" :list="adminUserList" />
+      <Menu class="menu" title="分类管理" :list="adminCategory" />
       <Menu class="menu" title="用户管理" :list="adminUserList" />
       <Menu class="menu" title="文章管理" :list="adminArticleList" />
       <Menu class="menu" title="导航" :list="mainList" />
@@ -116,6 +117,18 @@ export default defineComponent({
         {
           id: "menu2",
           label: "用户管理",
+          path:'/articleList'
+        },
+      ],
+      adminCategory:[
+        {
+          id: "menu1",
+          label: "权限管理",
+          path:'/addArticle'
+        },
+        {
+          id: "menu2",
+          label: "分类管理",
           path:'/articleList'
         },
       ],
