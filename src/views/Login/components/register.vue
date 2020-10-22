@@ -85,13 +85,14 @@ import {
   stripscript,
   valUsername,
   valPassword,
-  valCode,
 } from "@/utils/validator.ts";
 import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
-import { useForm } from "@ant-design-vue/use";
+
 import server from "@/utils/axios";
 import { message } from "ant-design-vue";
-
+import useValidator from './ts/useValidator'
+import useRegSubmit from './ts/useRegSubmit'
+import useCode from './ts/useCode'
 export default defineComponent({
   name: "Register",
   emits: ["update:activeIndex"],
@@ -114,131 +115,16 @@ export default defineComponent({
       disabled: false,
       text: "验证码",
     });
-
-    let validateUsername: RuleFn = (rule, callback) => {
-      let value = formData.user;
-      if (value === "") {
-        return Promise.reject("用户名不能为空");
-      } else {
-        if (valUsername(value)) {
-          return Promise.reject("用户名格式不正确");
-        }
-        return Promise.resolve();
-      }
-    };
-    let validatePassword: RuleFn = (rule, callback) => {
-      // 过滤特殊字符
-      formData.password = stripscript(formData.password as string);
-      let value = formData.password;
-      if (value === "") {
-        return Promise.reject("密码不能为空");
-      } else if (valPassword(value)) {
-        return Promise.reject("请输入6-20位数字+字母");
-      } else {
-        return Promise.resolve();
-      }
-    };
-    let validatePassword2: RuleFn = (rule, callback) => {
-      formData.password2 = stripscript(formData.password2 as string);
-      let value = formData.password2;
-      if (value === "") {
-        return Promise.reject("密码不能为空");
-      } else if (valPassword(value)) {
-        return Promise.reject("请输入6-20位数字+字母");
-      } else if (value != formData.password) {
-        return Promise.reject("两次输入的密码不一致");
-      } else {
-        return Promise.resolve();
-      }
-    };
-    let validateCode: RuleFn = (rule, callback) => {
-      let value = formData.code;
-      if (value === "") {
-        return Promise.reject("验证码不能为空");
-      } else if (valCode(value as string)) {
-        return Promise.reject("验证码格式不正确");
-      } else {
-        return Promise.resolve();
-      }
-    };
-
+    const {validateUsername,validatePassword,validatePassword2,validateCode} = useValidator(formData)
     const rules = reactive({
       user: [{ validator: validateUsername, trigger: "change" }],
       password: [{ validator: validatePassword, trigger: "change" }],
       password2: [{ validator: validatePassword2, trigger: "change" }],
       code: [{ validator: validateCode, trigger: "change" }],
     });
-    const { resetFields, validate, validateInfos } = useForm(formData, rules);
-
-    const onSubmit = (e: Event) => {
-      e.preventDefault();
-      validate()
-        .then(async () => {
-          let res = await server.request({
-            url: "/api/register",
-            method: "post",
-            data: { ...formData },
-          });
-          message.success("注册成功");
-          emit('update:activeIndex',0)
-        })
-        .catch((err) => {
-          message.error("发生异常");
-          console.log("error", err);
-        });
-    };
-    const resetForm = () => {
-      resetFields();
-    };
-
-    const getCode = async () => {
-      if (!formData.user) {
-        return;
-      }
-      updateStatus({
-        loading: true,
-        disabled: true,
-        text: "发送中",
-      });
-      let res = await server.request({
-        url: "/api/nodemailer",
-        method: "post",
-        data: { user: formData.user },
-      });
-      countDown(60);
-    };
-    const updateStatus = (data: typeof btnStatus) => {
-      btnStatus.loading = data.loading;
-      btnStatus.disabled = data.disabled;
-      btnStatus.text = data.text;
-    };
-    const timer: Ref = ref(null);
-    // 验证码倒计时
-    const countDown = (number: number) => {
-      // 预防多次点击 判断定时器是否存在
-      if (timer.value) {
-        clearCountDown(timer.value);
-      }
-      timer.value = setInterval(() => {
-        number--;
-        if (number === 0) {
-          // 清除定时器
-          clearCountDown(timer);
-          // 修改验证码按钮状态
-          updateStatus({
-            loading: false,
-            disabled: false,
-            text: "再次获取",
-          });
-        } else {
-          btnStatus.text = `${number}S`;
-        }
-      }, 1000);
-    };
-    // 清除定时器
-    const clearCountDown = (timer: Ref) => {
-      clearInterval(timer.value);
-    };
+    const { onSubmit, resetForm, validateInfos } = useRegSubmit(formData,rules,emit)
+    const { getCode } = useCode(formData,btnStatus)
+   
     return {
       formStyle: {
         labelCol: { span: 5 },

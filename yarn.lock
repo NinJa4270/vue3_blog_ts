@@ -8835,11 +8835,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha1-eGQcSIuObKkadfUR56OzKobl3aA=
 
-vue-class-component@^8.0.0-0:
-  version "8.0.0-beta.4"
-  resolved "https://registry.npm.taobao.org/vue-class-component/download/vue-class-component-8.0.0-beta.4.tgz?cache=0&sync_timestamp=1601818949255&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-class-component%2Fdownload%2Fvue-class-component-8.0.0-beta.4.tgz#bff95cdd44eb450a4a4e54b69da22099613d8071"
-  integrity sha1-v/lc3UTrRQpKTlS2naIgmWE9gHE=
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.npm.taobao.org/vue-hot-reload-api/download/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -8864,11 +8859,6 @@ vue-loader@^15.9.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
-
-vue-property-decorator@^9.0.2:
-  version "9.0.2"
-  resolved "https://registry.npm.taobao.org/vue-property-decorator/download/vue-property-decorator-9.0.2.tgz#118459d77b4d5613ab2bbccba2edd5d7af685d30"
-  integrity sha1-EYRZ13tNVhOrK7zLou3V169oXTA=
 
 vue-router@^4.0.0-0:
   version "4.0.0-beta.13"

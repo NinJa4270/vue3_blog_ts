@@ -55,101 +55,21 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  reactive,
-  Ref,
-  ref,
-  getCurrentInstance,
-} from "vue";
-import { stripscript, valUsername, valPassword } from "@/utils/validator.ts";
-import { useRouter } from "vue-router";
-import { setStorage, getStorage } from "@/utils/storage.ts";
-import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
-import { useForm } from "@ant-design-vue/use";
-import server from '@/utils/axios'
-import { message } from "ant-design-vue";
-import { useStore } from 'vuex';
-
+import { defineComponent, onMounted, reactive, ref } from "vue";
+import { LoginForm, RulesObj } from "@/types/login.ts";
+import useValidator from "./ts/useValidator";
+import useLoginSubmit from "./ts/useLoginSubmit";
+import useInit from './ts/useInit'
 export default defineComponent({
-  name:'Login',
+  name: "Login",
   setup(props, ctx) {
-    const store = useStore()
-    const router = useRouter();
-    const checked = ref(false);
-    // 表单数据// 判断是否存在登陆记录
-    const formData: LoginForm = reactive({
-      user: "",
-      password: "",
-    });
-    // 自定义表单验证
-    /**
-     * @bug value无法正确获取  需要手动赋值
-     * @example value = formData.user
-     */
-    let validateUsername: RuleFn = (rule, callback) => {
-      let value = formData.user;
-      if (value === "") {
-        return Promise.reject("用户名不能为空");
-      } else {
-        if (valUsername(value)) {
-          return Promise.reject("用户名格式不正确");
-        }
-        return Promise.resolve();
-      }
-    };
-    let validatePassword: RuleFn = (rule, callback) => {
-      // 过滤特殊字符
-      formData.password = stripscript(formData.password as string);
-      let value = formData.password;
-      if (value === "") {
-        return Promise.reject("密码不能为空");
-      } else if (valPassword(value)) {
-        return Promise.reject("请输入6-20位数字+字母");
-      } else {
-        return Promise.resolve();
-      }
-    };
+    const { formData,checked } = useInit()
+    const { validateUsername, validatePassword } = useValidator(formData);
     const rules: RulesObj = reactive({
       user: [{ validator: validateUsername, trigger: "change" }],
       password: [{ validator: validatePassword, trigger: "change" }],
     });
-
-    const { resetFields, validate, validateInfos } = useForm(formData, rules);
-
-    const onSubmit = (e: any) => {
-      e.preventDefault();
-      validate()
-        .then(async () => {
-          let res = await server.request({
-            url: "/api/login",
-            method: "post",
-            data: { ...formData },
-          });
-          message.success("登陆成功");
-          if (checked.value) {
-            // 储存到localStorage中
-            setStorage("userInfo", formData);
-          }
-          // 储存到vuex
-          store.commit("SET_USERINFO", formData);
-          store.commit("SET_STATUS", 1);
-          router.push("/main");
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    };
-    const resetForm = () => {
-      resetFields();
-    };
-    onMounted: {
-      if (getStorage("userInfo")) {
-        formData.user = getStorage("userInfo").user;
-        formData.password = getStorage("userInfo").password;
-      }
-    }
+    const { onSubmit, resetForm, validateInfos } = useLoginSubmit(formData,rules,checked); 
     return {
       checked,
       // 表单样式
