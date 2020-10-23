@@ -93,6 +93,7 @@ import { message } from "ant-design-vue";
 import useValidator from './ts/useValidator'
 import useRegSubmit from './ts/useRegSubmit'
 import useCode from './ts/useCode'
+import useRegInit from './ts/useRegInit'
 export default defineComponent({
   name: "Register",
   emits: ["update:activeIndex"],

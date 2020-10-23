@@ -55,15 +55,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { LoginForm, RulesObj } from "@/types/login.ts";
 import useValidator from "./ts/useValidator";
 import useLoginSubmit from "./ts/useLoginSubmit";
-import useInit from './ts/useInit'
+import useLoginInit from './ts/useLoginInit'
 export default defineComponent({
   name: "Login",
   setup(props, ctx) {
-    const { formData,checked } = useInit()
+    const { formData,checked } = useLoginInit()
     const { validateUsername, validatePassword } = useValidator(formData);
     const rules: RulesObj = reactive({
       user: [{ validator: validateUsername, trigger: "change" }],

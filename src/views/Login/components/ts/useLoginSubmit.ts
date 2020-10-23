@@ -7,7 +7,7 @@ import { useStore } from "vuex";
 import { setStorage } from "@/utils/storage.ts";
 import { useRouter } from "vue-router";
 
-function useLoginSubmit(
+export default function useLoginSubmit(
   formData: LoginForm,
   rules: RulesObj,
   checked: Ref<boolean>
@@ -49,4 +49,4 @@ function useLoginSubmit(
   return { onSubmit, resetForm, validateInfos };
 }
 
-export default useLoginSubmit;
+

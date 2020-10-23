@@ -1,7 +1,7 @@
 import { LoginForm } from "@/types/login";
 import server from "@/utils/axios";
 import { ref, Ref } from 'vue';
-function useCode(formData: LoginForm, btnStatus: any) {
+export default function useCode(formData: LoginForm, btnStatus: any) {
   const timer: Ref = ref(null);
 
   const getCode = async () => {
@@ -53,4 +53,3 @@ function useCode(formData: LoginForm, btnStatus: any) {
 
   return { getCode };
 }
-export default useCode;

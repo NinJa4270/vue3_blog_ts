@@ -3,7 +3,7 @@ import { useForm } from "@ant-design-vue/use";
 import server from "@/utils/axios";
 import { message } from "ant-design-vue";
 
-function useRegSubmit(formData:LoginForm,rules:RulesObj,emit:any) {
+export default  function useRegSubmit(formData:LoginForm,rules:RulesObj,emit:any) {
   const { resetFields, validate, validateInfos } = useForm(formData, rules);
   const onSubmit = (e: Event) => {
     e.preventDefault();
@@ -28,4 +28,3 @@ function useRegSubmit(formData:LoginForm,rules:RulesObj,emit:any) {
   return { onSubmit, resetForm, validateInfos };
 }
 
-export default useRegSubmit;

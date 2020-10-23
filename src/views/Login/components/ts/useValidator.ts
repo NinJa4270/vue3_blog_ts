@@ -1,7 +1,7 @@
 import { LoginForm,RuleFn } from "@/types/login.ts";
 import { stripscript, valUsername, valPassword, valCode } from "@/utils/validator.ts";
 
-function useValidator(formData:LoginForm) {
+export default function useValidator(formData:LoginForm) {
   // 自定义表单验证
   /**
    * @bug value无法正确获取  需要手动赋值
@@ -57,4 +57,3 @@ function useValidator(formData:LoginForm) {
 
   return {validateUsername,validatePassword,validateCode,validatePassword2 }
 }
-export default useValidator
