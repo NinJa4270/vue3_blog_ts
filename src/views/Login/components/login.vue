@@ -61,11 +61,10 @@ import useLoginSubmit from "./ts/useLoginSubmit";
 import useLoginInit from './ts/useLoginInit'
 export default defineComponent({
   name: "Login",
-  setup(props, ctx) {
+  setup() {
     const { formData,checked } = useLoginInit()
     const { loginRules } = useValidator(formData);
     const { onSubmit, resetForm, validateInfos } = useLoginSubmit(formData,loginRules,checked); 
-    console.log(validateInfos)
     return {
       checked,
       // 表单样式
