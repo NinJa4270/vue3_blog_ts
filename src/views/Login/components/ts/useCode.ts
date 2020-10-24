@@ -1,4 +1,4 @@
-import { LoginForm } from "@/types/login";
+import { LoginForm } from "./types";
 import server from "@/utils/axios";
 import { ref, Ref } from 'vue';
 export default function useCode(formData: LoginForm, btnStatus: any) {

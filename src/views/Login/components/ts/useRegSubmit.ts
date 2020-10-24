@@ -1,4 +1,4 @@
-import { LoginForm, RulesObj } from '@/types/login';
+import { LoginForm, RulesObj } from './types';
 import { useForm } from "@ant-design-vue/use";
 import server from "@/utils/axios";
 import { message } from "ant-design-vue";

@@ -9,7 +9,9 @@ export default createStore({
   state: {
     userInfo: {
       user: "",
-      password: "",
+      role_name: "",
+      role: "",
+      role_id: 0,
     },
     status: 0,
   },
@@ -27,7 +29,7 @@ export default createStore({
     },
     SET_STATUS: (state: State, val: number): void => {
       state.status = val;
-      setStorage("status", val+"");
+      setStorage("status", val + "");
     },
   },
   actions: {},

@@ -1,5 +1,5 @@
 import { useForm } from "@ant-design-vue/use";
-import { LoginForm, RulesObj } from "@/types/login.ts";
+import { LoginForm, RulesObj } from "./types";
 import server from "@/utils/axios";
 import { message } from "ant-design-vue";
 import { Ref } from "vue";
@@ -29,10 +29,10 @@ export default function useLoginSubmit(
           message.success("登陆成功");
           if (checked.value) {
             // 储存到localStorage中
-            setStorage("userInfo", formData);
+            setStorage("userInfo", res.data.data);
           }
           // 储存到vuex
-          store.commit("SET_USERINFO", formData);
+          store.commit("SET_USERINFO", res.data.data);
           store.commit("SET_STATUS", 1);
           router.push("/main");
         }

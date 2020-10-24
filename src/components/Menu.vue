@@ -11,7 +11,7 @@
     <template v-slot:overlay>
       <a-menu>
         <a-menu-item v-for="menu in list" :key="menu.id">
-          <a href="javascript:;" @click="go(menu.path)">{{ menu.label }}</a>
+          <a href="javascript:;" @click="go(menu.path)">{{ menu.name }}</a>
         </a-menu-item>
       </a-menu>
     </template>

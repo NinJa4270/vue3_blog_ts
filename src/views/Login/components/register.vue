@@ -11,7 +11,7 @@
       class="form"
       :label-col="formStyle.labelCol"
       :wrapper-col="formStyle.wrapperCol"
-      :rules="rules"
+      :rules="regRules"
     >
       <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
         <a-input
@@ -79,60 +79,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref } from "vue";
-import { useRouter } from "vue-router";
-import {
-  stripscript,
-  valUsername,
-  valPassword,
-} from "@/utils/validator.ts";
-import { LoginForm, RuleFn, RulesObj } from "@/types/login.ts";
-
-import server from "@/utils/axios";
-import { message } from "ant-design-vue";
-import useValidator from './ts/useValidator'
-import useRegSubmit from './ts/useRegSubmit'
-import useCode from './ts/useCode'
-import useRegInit from './ts/useRegInit'
+import { defineComponent } from "vue";
+import useValidator from "./ts/useValidator";
+import useRegSubmit from "./ts/useRegSubmit";
+import useCode from "./ts/useCode";
+import useRegInit from "./ts/useRegInit";
 export default defineComponent({
   name: "Register",
   emits: ["update:activeIndex"],
-  props:{
-    activeIndex:{
-      type:Number,
-      default:1
-    }
+  props: {
+    activeIndex: {
+      type: Number,
+      default: 1,
+    },
   },
   setup(props, { emit }) {
-    const formData: LoginForm = reactive({
-      user: "",
-      password: "",
-      password2: "",
-      code: "",
-    });
-    const router = useRouter();
-    const btnStatus = reactive({
-      loading: false,
-      disabled: false,
-      text: "验证码",
-    });
-    const {validateUsername,validatePassword,validatePassword2,validateCode} = useValidator(formData)
-    const rules = reactive({
-      user: [{ validator: validateUsername, trigger: "change" }],
-      password: [{ validator: validatePassword, trigger: "change" }],
-      password2: [{ validator: validatePassword2, trigger: "change" }],
-      code: [{ validator: validateCode, trigger: "change" }],
-    });
-    const { onSubmit, resetForm, validateInfos } = useRegSubmit(formData,rules,emit)
-    const { getCode } = useCode(formData,btnStatus)
-   
+    const { formData, btnStatus } = useRegInit();
+    const { regRules } = useValidator(formData);
+    const { onSubmit, resetForm, validateInfos } = useRegSubmit(
+      formData,
+      regRules,
+      emit
+    );
+    const { getCode } = useCode(formData, btnStatus);
+
     return {
       formStyle: {
         labelCol: { span: 5 },
         wrapperCol: { span: 18 },
       },
       formData,
-      rules,
+      regRules,
       btnStatus,
       onSubmit,
       resetForm,

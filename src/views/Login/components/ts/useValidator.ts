@@ -1,7 +1,8 @@
-import { LoginForm,RuleFn } from "@/types/login.ts";
+import { LoginForm, RuleFn, RulesObj } from "./types";
 import { stripscript, valUsername, valPassword, valCode } from "@/utils/validator.ts";
-
+import { reactive } from 'vue'
 export default function useValidator(formData:LoginForm) {
+  
   // 自定义表单验证
   /**
    * @bug value无法正确获取  需要手动赋值
@@ -54,6 +55,17 @@ export default function useValidator(formData:LoginForm) {
       return Promise.resolve();
     }
   };
+  const loginRules: RulesObj = reactive({
+    user: [{ validator: validateUsername, trigger: "change" }],
+    password: [{ validator: validatePassword, trigger: "change" }],
+  });
 
-  return {validateUsername,validatePassword,validateCode,validatePassword2 }
+  const regRules: RulesObj = reactive({
+    user: [{ validator: validateUsername, trigger: "change" }],
+    password: [{ validator: validatePassword, trigger: "change" }],
+    password2: [{ validator: validatePassword2, trigger: "change" }],
+    code: [{ validator: validateCode, trigger: "change" }],
+  });
+
+  return { loginRules, regRules }
 }

@@ -11,7 +11,7 @@
       class="form"
       :label-col="formStyle.labelCol"
       :wrapper-col="formStyle.wrapperCol"
-      :rules="rules"
+      :rules="loginRules"
     >
       <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
         <a-input
@@ -55,8 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import { LoginForm, RulesObj } from "@/types/login.ts";
+import { defineComponent } from "vue";
 import useValidator from "./ts/useValidator";
 import useLoginSubmit from "./ts/useLoginSubmit";
 import useLoginInit from './ts/useLoginInit'
@@ -64,12 +63,9 @@ export default defineComponent({
   name: "Login",
   setup(props, ctx) {
     const { formData,checked } = useLoginInit()
-    const { validateUsername, validatePassword } = useValidator(formData);
-    const rules: RulesObj = reactive({
-      user: [{ validator: validateUsername, trigger: "change" }],
-      password: [{ validator: validatePassword, trigger: "change" }],
-    });
-    const { onSubmit, resetForm, validateInfos } = useLoginSubmit(formData,rules,checked); 
+    const { loginRules } = useValidator(formData);
+    const { onSubmit, resetForm, validateInfos } = useLoginSubmit(formData,loginRules,checked); 
+    console.log(validateInfos)
     return {
       checked,
       // 表单样式
@@ -78,7 +74,7 @@ export default defineComponent({
         wrapperCol: { span: 18 },
       },
       formData,
-      rules,
+      loginRules,
       onSubmit,
       resetForm,
       validateInfos,

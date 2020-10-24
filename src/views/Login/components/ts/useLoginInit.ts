@@ -1,4 +1,4 @@
-import { LoginForm } from "@/types/login.ts";
+import { LoginForm } from "./types";
 import { reactive, ref, onMounted } from "vue";
 import { getStorage } from "@/utils/storage.ts";
 
@@ -11,7 +11,6 @@ export default function useLoginInit() {
   onMounted(() => {
     if (getStorage("userInfo")) {
       formData.user = getStorage("userInfo").user;
-      formData.password = getStorage("userInfo").password;
     }
   });
   return { formData, checked };
