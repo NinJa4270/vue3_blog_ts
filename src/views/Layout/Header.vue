@@ -60,12 +60,10 @@ export default defineComponent({
     Menu,
     LogoutOutlined,
   },
-
   setup() {
     const { navList } = useNav();
     const { login, logout, goCenter, store } = useBtn();
     const logo = ref(require("../../assets/img/logo.jpg"));
-
     return {
       navList,
       store,
