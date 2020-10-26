@@ -5,8 +5,9 @@ const List = () => import(/* webpackChunkName: "List" */ "../views/List/index.vu
 const Center = () => import(/* webpackChunkName: "Center" */ "../views/Center/index.vue")
 const Article = () => import(/* webpackChunkName: "Article" */ "../views/Article/index.vue")
 const Login = () => import(/* webpackChunkName: "Login" */ "../views/Login/index.vue")
-const AddArticle = () => import(/* webpackChunkName: "Admin" */ "../views/Admin/AddArticle/index.vue")
-const ArticleList = () => import(/* webpackChunkName: "Admin" */ "../views/Admin/ArticleList/index.vue")
+const AddArticle = () => import(/* webpackChunkName: "Admin-Article" */ "../views/Admin/AddArticle/index.vue")
+const ArticleList = () => import(/* webpackChunkName: "Admin-Article" */ "../views/Admin/ArticleList/index.vue")
+const NavCategories = () => import(/* webpackChunkName: "Admin-Categories" */ "../views/Admin/Categories/NavCategories/index.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/addArticle",
         name: "AddArticle",
         component: AddArticle
+      },
+      {
+        path: "/navCategories",
+        name: "NavCategories",
+        component: NavCategories
       },
     ],
   },
