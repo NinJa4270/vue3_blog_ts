@@ -1,12 +1,12 @@
 import server from "@/utils/axios";
 import { getStorage } from "@/utils/storage.ts";
 import { onMounted, reactive } from "vue";
-import { useStore } from 'vuex';
-import { NavList } from './types'
+import { useStore } from "vuex";
+import { NavList, NavListArr } from "./types";
 
 export default function useNav() {
-  const store = useStore()
-  let navList: NavList[]|[] = reactive([]);
+  const store = useStore();
+  let navList: NavList = reactive({list:[]});
   const getNav = async () => {
     let data = {};
     if (store.state.status == 1 && getStorage("userInfo")) {
@@ -17,7 +17,7 @@ export default function useNav() {
       method: "post",
       data,
     });
-    (navList as NavList[]).push(...res.data.data.reverse());
+    (navList.list as NavListArr[]).push(...res.data.data.reverse());
   };
   onMounted(() => {
     getNav();

@@ -1,4 +1,7 @@
 export interface NavList {
+  list?: NavListArr[];
+}
+export interface NavListArr {
   id: number;
   name: string;
   path: string;
@@ -6,5 +9,5 @@ export interface NavList {
   role_id: number;
   create_time: string;
   update_time: string;
-  children?: NavList[];
+  children?: NavListArr[];
 }

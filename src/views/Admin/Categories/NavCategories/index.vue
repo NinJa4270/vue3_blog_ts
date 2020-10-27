@@ -6,7 +6,7 @@
 <template>
   <div class="nav-categories-wrap">
     <div class="table">
-      <a-table :data-source="navList" rowKey="id" bordered>
+      <a-table :data-source="navList.list" rowKey="id" bordered>
         <a-table-column key="id" title="id" data-index="id" :width="200" />
         <a-table-column
           key="name"
@@ -51,14 +51,14 @@
 import { defineComponent } from "vue";
 import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
 import useGetData from "./ts/useGetData";
-import { NavList } from "@/views/Layout/ts/types";
+import { NavList,NavListArr } from "@/views/Layout/ts/types";
 import server from "@/utils/axios";
 export default defineComponent({
   name: "NavCategories",
   setup() {
     let { navList, getNav } = useGetData();
 
-    const add = async (item: NavList) => {
+    const add = async (item: NavListArr) => {
       let { data:res } = await server.request({
         url: "/api/addNav",
         method: "post",
@@ -67,15 +67,16 @@ export default defineComponent({
       console.log(res);
     };
 
-    const remove = async (item: NavList) => {
+    const remove = async (item: NavListArr) => {
       let { data:res } = await server.request({
         url: "/api/deleteNav",
         method: "post",
         data: { id: item.id },
       });
+      getNav()
     };
 
-    const edit = (item: NavList) => {};
+    const edit = (item: NavListArr) => {};
 
     return {
       navList,
