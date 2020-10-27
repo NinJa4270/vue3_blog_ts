@@ -6,7 +6,8 @@ import store from "./store";
 import 'highlight.js/styles/monokai.css';
 import "ant-design-vue/dist/antd.css";
 import "./assets/css/main.scss";
-
+import 'highlight.js/styles/monokai.css';
+import VueMarkdownIt from 'vue3-markdown-it';
 // 引入antd
 import Antd from "ant-design-vue";
 
@@ -15,4 +16,5 @@ app
   .use(store)
   .use(router)
   .use(Antd)
+  .use(VueMarkdownIt)
   .mount("#app");

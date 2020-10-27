@@ -33,33 +33,23 @@
             style="width: 100%;"
           />
         </a-form-item>
-        <a-form-item label="上传MD文件">
-          <a-upload
-            name="file"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            :headers="headers"
-            @change="handleChange"
-            :file-list="fileList"
-            :showUploadList="true"
-          >
-            <a-button> <upload-outlined /> Click to Upload </a-button>
-          </a-upload>
-        </a-form-item>
-        <div class="markit">预览</div>
       </a-form>
     </div>
+    <Editor v-model:source="source" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, watch } from "vue";
 import { Article } from "@/types/article";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import Editor from "@/components/Editor.vue";
 export default defineComponent({
   name: "AddArticle",
   components: {
     UploadOutlined,
+    Editor,
   },
   setup() {
     const form: Article = reactive({
@@ -84,36 +74,15 @@ export default defineComponent({
     ];
     const source = ref("### 123");
     const onSubmit = () => {};
-    const fileList = reactive([
-      {
-        uid: "uid", // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
-        name: "xx.png", // 文件名
-        status: "done", // 状态有：uploading done error removed
-        response: '{"status": "success"}', // 服务端响应内容
-        linkProps: '{"download": "image"}', // 下载链接额外的 HTML 属性
-        xhr: "XMLHttpRequest{ ... }", // XMLHttpRequest Header
-      },
-    ]);
-    const handleChange = (info: any) => {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    };
+    watch(source,()=>{
+      console.log(source.value)
+    })
     return {
       categories,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       form,
-      fileList,
-      headers: {
-        authorization: "authorization-text",
-      },
-      handleChange,
+      source,
     };
   },
 });

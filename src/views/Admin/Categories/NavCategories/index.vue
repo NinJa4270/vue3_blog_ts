@@ -97,7 +97,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, Ref, ref } from "vue";
-import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
 import useGetData from "./ts/useGetData";
 import { NavList, NavListArr } from "@/views/Layout/ts/types";
 import server from "@/utils/axios";
