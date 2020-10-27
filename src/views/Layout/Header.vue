@@ -15,7 +15,7 @@
     </div>
     <div class="info">
       <Menu
-        v-for="nav in navList"
+        v-for="nav in navList.list"
         :key="nav.id"
         class="menu"
         :title="nav.name"
