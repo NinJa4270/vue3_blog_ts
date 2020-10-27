@@ -9,10 +9,14 @@
       class="input"
       :value="source"
       @input="$emit('update:source', $event.target.value)"
-      placeholder="Hellow! guys"
-      :rows="4"
+      placeholder="Hellow, guys!!!"
+      :style="{height:`${height}px`}"
     />
-    <vue3-markdown-it class="marked" :source="source"/>
+    <vue3-markdown-it
+      class="marked"
+      :source="source"
+      :style="{height:`${height}px`}"
+    />
   </div>
 </template>
 
@@ -20,25 +24,35 @@
 import { computed, defineComponent, reactive, ref, watch } from "vue";
 export default defineComponent({
   name: "Editor",
-  props: ["source"],
-  emits: ["update:source"],
-  setup(props, { emit }) {
-    return {
-    };
+  props: {
+    source: {
+      type: String,
+      default: () => {
+        return "Hellow, guys!!!";
+      },
+    },
+    height: {
+      type: [String, Number],
+      default: () => {
+        return 400;
+      },
+    },
   },
+  emits: ["update:source"],
 });
 </script>
 
 <style scoped lang="scss">
 .editor {
   display: flex;
+  align-items: flex-start;
   background-color: #eeeeee;
   padding: 10px;
   box-sizing: border-box;
   border: 1px solid #000000;
   .input {
-    min-height: 400px;
     flex: 1;
+    resize:none
   }
   .marked {
     background-color: #ffffff;
@@ -46,6 +60,8 @@ export default defineComponent({
     width: 50%;
     box-sizing: border-box;
     padding: 10px;
+    overflow-x: scroll;
+    overflow-y: scroll;
   }
 }
 </style>
