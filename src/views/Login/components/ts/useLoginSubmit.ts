@@ -30,9 +30,11 @@ export default function useLoginSubmit(
           if (checked.value) {
             // 储存到localStorage中
             setStorage("userInfo", res.data.data);
+            setStorage("token", res.data.data.token);
           }
           // 储存到vuex
           store.commit("SET_USERINFO", res.data.data);
+          store.commit("SET_TOKEN", res.data.data.token);
           store.commit("SET_STATUS", 1);
           router.push("/main");
         }

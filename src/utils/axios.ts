@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { message } from 'ant-design-vue';
-// import { getStorage } from "./storage";
+import { getStorage } from "./storage";
 const baseUrl = process.env.BASE_URL
 
 interface Config {
@@ -16,7 +16,7 @@ class Request {
       baseURL: this.baseUrl,
       headers: {
         // 请求头
-        // Authorization: 'Bearer ' + getToken(),
+        Authorization: 'Bearer ' + getStorage('token'),
         // username: getStorage('userInfo')
       }
     }
