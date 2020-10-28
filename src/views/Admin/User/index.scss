@@ -1,0 +1,12 @@
+.user-wrap{
+  padding: 40px 20px;
+  .paging {
+    padding: 20px 0;
+    display: flex;
+    justify-content: flex-end;
+    .ipt{
+      width: 200px;
+      margin: 0 20px;
+    }
+  }
+}

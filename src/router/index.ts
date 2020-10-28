@@ -9,6 +9,7 @@ const AddArticle = () => import(/* webpackChunkName: "Admin-Article" */ "../view
 const ArticleList = () => import(/* webpackChunkName: "Admin-Article" */ "../views/Admin/Articles/ArticleList/index.vue")
 const NavCategories = () => import(/* webpackChunkName: "Admin-Categories" */ "../views/Admin/Categories/NavCategories/index.vue")
 const ArticleCategories = () => import(/* webpackChunkName: "Admin-Categories" */ "../views/Admin/Categories/ArticleCategories/index.vue")
+const User = () => import(/* webpackChunkName: "Admin-User" */ "../views/Admin/User/index.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/articleCategories",
         name: "ArticleCategories",
         component: ArticleCategories
+      },
+      {
+        path: "/user",
+        name: "User",
+        component: User
       },
     ],
   },
