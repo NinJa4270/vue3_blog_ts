@@ -6,7 +6,12 @@
 <template>
   <div class="article-categories-wrap">
     <div class="table">
-      <a-table :data-source="articlesList.list" rowKey="id" bordered>
+      <a-table
+        :data-source="articlesList.list"
+        rowKey="id"
+        bordered
+        :pagination="false"
+      >
         <a-table-column key="id" title="id" data-index="id" :width="200" />
         <a-table-column
           key="name"
@@ -14,7 +19,7 @@
           data-index="name"
           :width="200"
         />
-        <a-table-column key="action" title="Action">
+        <a-table-column key="action" title="操作">
           <template v-slot="{ record }">
             <a-button
               class="btn"
@@ -43,6 +48,13 @@
           </template>
         </a-table-column>
       </a-table>
+      <a-pagination
+        class="paging"
+        :total="articlesList.pagination.total"
+        :showTotal="() => `Total ${articlesList.pagination.total}`"
+        show-quick-jumper
+        @change="jump"
+      />
     </div>
   </div>
 </template>
@@ -57,8 +69,12 @@ export default defineComponent({
   name: "ArticleCategories",
   setup() {
     const { articlesList, getData } = useGetData();
+    const jump = (curr: number) => {
+      getData(curr);
+    };
     return {
       articlesList,
+      jump,
     };
   },
 });
