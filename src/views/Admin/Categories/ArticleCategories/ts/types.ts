@@ -8,6 +8,7 @@ export interface ArtCategoryArr {
   name?: string;
   create_time?: string;
   update_time?: string;
+  editable?:boolean;
 }
 
 export interface Pagination {
