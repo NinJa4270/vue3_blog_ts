@@ -11,7 +11,6 @@ export default function useBtn() {
   const logout = () => {
     message.success("登出成功");
     store.commit("SET_USERINFO", { user: "", password: "" });
-    store.commit("SET_STATUS", 0);
     // 调用登出接口
     router.push("./main");
   };

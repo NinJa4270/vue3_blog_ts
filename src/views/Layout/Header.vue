@@ -21,7 +21,7 @@
         :title="nav.name"
         :list="nav.children"
       />
-      <div class="login-btns" v-if="store.state.status !== 1">
+      <div class="login-btns" v-if="!store.state.userInfo.user">
         <a-button type="link" size="large" ghost @click="login">
           登录
         </a-button>

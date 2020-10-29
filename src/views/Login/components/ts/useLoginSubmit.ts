@@ -35,7 +35,6 @@ export default function useLoginSubmit(
           // 储存到vuex
           store.commit("SET_USERINFO", res.data.data);
           store.commit("SET_TOKEN", res.data.data.token);
-          store.commit("SET_STATUS", 1);
           router.push("/main");
         }
       })
