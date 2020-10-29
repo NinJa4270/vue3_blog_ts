@@ -7,7 +7,7 @@ export default function useGetData(){
   const getData = async (pageNum: number) => {
     userList.list = [];
     let res = await server.request({
-      url: "/api/users",
+      url: "/api/userList",
       method: "post",
       data: {
         pageNum,

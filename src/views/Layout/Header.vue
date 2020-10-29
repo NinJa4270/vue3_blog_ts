@@ -65,7 +65,7 @@ export default defineComponent({
     const { login, logout, goCenter, store } = useBtn(getNav);
     const logo = ref(require("../../assets/img/logo.jpg"));
     const userInfo = computed(() => store.getters.GET_USERINFO);
-    const isLogin = computed(() => store.getters.GET_ISLOGING);
+    const isLogin = computed(() =>store.getters.GET_ISLOGING);
     return {
       navList,
       logo,
