@@ -1,9 +1,15 @@
 import { createStore } from "vuex";
 import { setStorage, getStorage } from "@/utils/storage.ts";
 interface State {
-  userInfo: object;
+  userInfo: UserInfo;
   token: string;
   isLogin: boolean;
+}
+interface UserInfo{
+  user?: string;
+  role_name?: string;
+  role?: string;
+  role_id?: number;
 }
 
 export default createStore({
@@ -18,7 +24,9 @@ export default createStore({
     isLogin: false,
   },
   getters: {
-    GET_USERINFO: (state: State) => state.userInfo,
+    GET_USERINFO: (state: State) => {
+      return state.userInfo.user ? state.userInfo : getStorage("userInfo");
+    },
     GET_TOKEN: (state: State) => state.token,
     GET_ISLOGING: (state: State) => {
       return state.isLogin ? state.isLogin : getStorage("isLogin");

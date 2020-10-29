@@ -21,7 +21,7 @@
         :title="nav.name"
         :list="nav.children"
       />
-      <div class="login-btns" v-if="!store.state.userInfo.user">
+      <div class="login-btns" v-if="!isLogin">
         <a-button type="link" size="large" ghost @click="login">
           登录
         </a-button>
@@ -38,7 +38,7 @@
             srcset=""
           />
           <div class="user-name">
-            {{ store.state.userInfo.user }}
+            {{ userInfo.user }}
           </div>
         </a-popover>
         <LogoutOutlined :style="{ fontSize: '30px' }" @click="logout" />
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { LogoutOutlined } from "@ant-design/icons-vue";
 import useNav from "./ts/useNav";
 import useBtn from "./ts/useBtn";
@@ -64,13 +64,17 @@ export default defineComponent({
     const { navList } = useNav();
     const { login, logout, goCenter, store } = useBtn();
     const logo = ref(require("../../assets/img/logo.jpg"));
+    const userInfo = computed(() => store.getters.GET_USERINFO)
+    const isLogin = computed(() => store.getters.GET_ISLOGING)
+    console.log(userInfo)
     return {
       navList,
-      store,
       logo,
       login,
       logout,
       goCenter,
+      isLogin,
+      userInfo
     };
   },
 });
