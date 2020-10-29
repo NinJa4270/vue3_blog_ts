@@ -5,7 +5,7 @@ interface State {
   token: string;
   isLogin: boolean;
 }
-interface UserInfo{
+interface UserInfo {
   user?: string;
   role_name?: string;
   role?: string;
@@ -37,10 +37,13 @@ export default createStore({
       if (val) {
         state.userInfo = val;
         state.isLogin = true;
+        setStorage("userInfo", val);
         setStorage("isLogin", true);
       } else {
-        state.userInfo = { user: "", role_name: "", role: "", role_id: 0 };
+        let userInfo = { user: "", role_name: "", role: "", role_id: 0 };
+        state.userInfo = userInfo;
         state.isLogin = false;
+        setStorage("userInfo", userInfo);
         setStorage("isLogin", false);
       }
     },

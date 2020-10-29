@@ -4,8 +4,9 @@ import { onMounted, reactive } from "vue";
 import { NavList, NavListArr } from "./types";
 
 export default function useNav() {
-  let navList: NavList = reactive({list:[]});
+  let navList: NavList = reactive({ list: [] });
   const getNav = async () => {
+    navList.list = [];
     let data = {};
     if (getStorage("userInfo")) {
       data = getStorage("userInfo");
@@ -20,5 +21,5 @@ export default function useNav() {
   onMounted(() => {
     getNav();
   });
-  return { navList };
+  return { navList, getNav };
 }
