@@ -20,7 +20,7 @@
           data-index="path"
           :width="200"
         />
-        <a-table-column key="action" title="Action">
+        <a-table-column key="action" title="操作">
           <template v-slot="{ record }">
             <a-button
               class="btn"

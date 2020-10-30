@@ -1,8 +1,9 @@
 import server from "@/utils/axios";
-import { User, UserArr, Pagination } from "./types";
+import { User, Pagination, UserList } from "./types";
 import { onMounted, reactive } from "vue";
-export default function useGetData(){
-  let userList: User = reactive({ list: [], pagination: {} });
+import { formatDate } from "@/utils/utils";
+export default function useGetData() {
+  let userList: UserList = reactive({ list: [], pagination: {} });
 
   const getData = async (pageNum: number) => {
     userList.list = [];
@@ -14,7 +15,13 @@ export default function useGetData(){
         pageSize: 10,
       },
     });
-    (userList.list as UserArr[]).push(...res.data.data.list);
+    let list = res.data.data.list;
+    list.map((item: User) => {
+      item.create_time = formatDate(item.create_time);
+      item.update_time = formatDate(item.update_time);
+      return item;
+    });
+    (userList.list as User[]).push(...list);
     (userList.pagination as Pagination) = {
       total: res.data.data.total || 0,
       hasNextPage: res.data.data.hasNextPage || false,
@@ -27,4 +34,3 @@ export default function useGetData(){
   });
   return { userList, getData };
 }
-
