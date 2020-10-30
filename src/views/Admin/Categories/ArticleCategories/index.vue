@@ -22,7 +22,7 @@
         bordered
         :pagination="false"
       >
-        <a-table-column key="id" title="id" data-index="id" :width="200" />
+        <a-table-column key="id" title="id" data-index="id" :width="80" />
         <a-table-column key="name" title="分类名" :width="200">
           <template v-slot="{ record }">
             <div class="editable-cell" :key="record.id">
@@ -46,7 +46,9 @@
             </div>
           </template>
         </a-table-column>
-        <a-table-column key="action" title="操作">
+        <a-table-column key="create_time" title="添加时间" data-index="create_time" />
+        <a-table-column key="update_time" title="更新时间" data-index="update_time" />
+        <a-table-column key="action" title="操作" :width="200">
           <template v-slot="{ record }">
             <a-button
               class="btn"
