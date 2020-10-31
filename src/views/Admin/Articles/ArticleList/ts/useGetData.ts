@@ -18,7 +18,7 @@ export default function useGetData() {
     list.map((item:Article) => {
       item.create_time = formatDate(item.create_time)
       item.update_time = formatDate(item.update_time)
-      item.content = JSON.parse(item.content)
+      item.content = item.content
       item.tags = JSON.parse((item.tags as string))
       return item
     });

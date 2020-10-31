@@ -53,23 +53,34 @@
         </a-form-item>
       </a-form>
     </div>
-    <Editor v-model:source="source" />
+    <Editor v-model:source="source" :breaks="true" :html="true" />
     <div class="btn">
-      <a-button type="primary" @click="add">添加</a-button>
+      <a-button type="primary" @click="add">{{
+        id ? "修改" : "添加"
+      }}</a-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, reactive, ref, toRefs, watch } from "vue";
-import { UploadOutlined } from "@ant-design/icons-vue";
+import {
+  defineComponent,
+  nextTick,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+  watchEffect,
+} from "vue";
+import { UploadOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { PlusOutlined } from "@ant-design/icons-vue";
 import Editor from "@/components/Editor.vue";
 import useGetCates from "./ts/useGetCates";
 import { TagList, Tag, Article } from "./ts/types";
 import { randomColor } from "@/utils/utils";
 import server from "@/utils/axios";
+import { useRoute } from "vue-router";
+import useGetArticle from "./ts/useGetArticle";
 export default defineComponent({
   name: "AddArticle",
   components: {
@@ -78,12 +89,9 @@ export default defineComponent({
     PlusOutlined,
   },
   setup() {
-    const form: Article = reactive({
-      title: "",
-      category: undefined,
-      tags: [],
-      source: "",
-    });
+    const route = useRoute();
+    const { id } = route.query;
+    const { form } = useGetArticle(id as string);
     // 文章分类 根据接口获取
     const { categories } = useGetCates();
     const onSubmit = () => {};
@@ -119,14 +127,33 @@ export default defineComponent({
       tagList.inputValue = "";
     };
     const add = async () => {
-      await server.request({
-        url: "/api/addArticle",
-        method: "post",
-        data: { ...form },
-      });
+      if (!id) {
+        await server.request({
+          url: "/api/addArticle",
+          method: "post",
+          data: {
+            title: form.title,
+            category: form.category,
+            tags: form.tags,
+            source: form.source,
+          },
+        });
+      } else if (id) {
+        await server.request({
+          url: "/api/editArticle",
+          method: "post",
+          data: {
+            id,
+            title: form.title,
+            category: form.category,
+            tags: form.tags,
+            source: form.source,
+          },
+        });
+      }
     };
-
     return {
+      id,
       categories,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },

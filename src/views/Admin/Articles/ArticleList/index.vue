@@ -45,8 +45,16 @@
           title="更新时间"
           data-index="update_time"
         />
-        <a-table-column key="action" title="操作" :width="100">
+        <a-table-column key="action" title="操作">
           <template v-slot="{ record }">
+            <a-button
+              class="btn"
+              type="info"
+              size="small"
+              @click="edit(record)"
+            >
+              编辑
+            </a-button>
             <a-button
               class="btn"
               type="danger"
@@ -87,16 +95,18 @@ export default defineComponent({
     const jump = (curr: number) => {
       getData(curr);
     };
-    const edit = (item: Article) => {};
+    const edit = (item: Article) => {
+      router.push(`/addArticle?id=${item.id}`);
+    };
     const remove = async (item: Article) => {
       await server.request({
         url: "/api/deleteArticle",
         method: "post",
         data: {
-          id:item.id
+          id: item.id,
         },
       });
-      getData(1)
+      getData(1);
     };
     return {
       articleList,
