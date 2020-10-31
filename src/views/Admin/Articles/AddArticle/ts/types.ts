@@ -26,3 +26,10 @@ export interface TagList {
   inputVisible?: boolean;
   inputValue?: string;
 }
+
+export interface Article {
+  title?:string;
+  category?: string;
+  tags:Array<Tag>;
+  source?:string;
+}

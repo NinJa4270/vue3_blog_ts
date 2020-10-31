@@ -6,12 +6,12 @@
 <template>
   <div class="addArticle-wrap">
     <div class="form">
-      <a-form :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="标题">
-          <a-input v-model:value="form.title" />
+          <a-input v-model:value="title" />
         </a-form-item>
         <a-form-item label="分类">
-          <a-select v-model:value="form.category" placeholder="请选择分类">
+          <a-select v-model:value="category" placeholder="请选择分类">
             <a-select-option
               :value="item.id"
               v-for="(item, index) in categories.list"
@@ -21,11 +21,15 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-
-
         <a-form-item label="技术栈">
           <div>
-            <a-tag v-for="(tag, index) in tagList.list" :color="tag.color" :key="index" closable @close="handleClose(tag)">
+            <a-tag
+              v-for="(tag, index) in tags"
+              :color="tag.color"
+              :key="index"
+              closable
+              @close="handleClose(tag)"
+            >
               {{ tag.name }}
             </a-tag>
             <a-input
@@ -47,32 +51,25 @@
             </a-tag>
           </div>
         </a-form-item>
-
-        <a-form-item label="选择日期">
-          <a-date-picker
-            v-model:value="form.date"
-            show-time
-            type="date"
-            placeholder="Pick a date"
-            style="width: 100%;"
-          />
-        </a-form-item>
       </a-form>
     </div>
     <Editor v-model:source="source" />
+    <div class="btn">
+      <a-button type="primary" @click="add">添加</a-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, reactive, ref, watch } from "vue";
-import { Article } from "@/types/article";
+import { defineComponent, nextTick, reactive, ref, toRefs, watch } from "vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import Editor from "@/components/Editor.vue";
 import useGetCates from "./ts/useGetCates";
-import { TagList,Tag } from './ts/types'
-import { randomColor } from '@/utils/utils'
+import { TagList, Tag, Article } from "./ts/types";
+import { randomColor } from "@/utils/utils";
+import server from "@/utils/axios";
 export default defineComponent({
   name: "AddArticle",
   components: {
@@ -82,53 +79,64 @@ export default defineComponent({
   },
   setup() {
     const form: Article = reactive({
-      title: "1",
+      title: "",
       category: undefined,
-      date: undefined,
+      tags: [],
+      source: "",
     });
     // 文章分类 根据接口获取
-    const source = ref("### 123");
     const { categories } = useGetCates();
     const onSubmit = () => {};
-    watch(source, () => {
-      console.log(source.value);
+    const tagList: TagList = reactive({
+      list: [],
+      inputVisible: false,
+      inputValue: "",
     });
-    const tagList:TagList = reactive({
-      list:[],
-      inputVisible:false,
-      inputValue:''
-    })
-    const input:any = ref(null)
-    const handleClose=(removedTag:string)=> {
-      tagList.list = (tagList.list as Array<Tag>).filter(tag=> tag.name !== removedTag);
-    }
-    const showInput=()=> {
+    const input: any = ref(null);
+    const handleClose = (removedTag: string) => {
+      form.tags = (form.tags as Array<Tag>).filter(
+        (tag) => tag.name !== removedTag
+      );
+    };
+    const showInput = () => {
       tagList.inputVisible = true;
       nextTick(() => {
-        input.value.focus()
+        input.value.focus();
       });
-    }
-    const handleInputConfirm=()=> {
-      if (tagList.inputValue){
-        if((tagList.list as Array<Tag>).every(tag=>{
-          return tag.name != tagList.inputValue
-        })){
-          let newTag = {name:tagList.inputValue,color:randomColor()};
-          console.log('newTag',newTag);
-          (tagList.list as Array<Tag>).push(newTag);
+    };
+    const handleInputConfirm = () => {
+      if (tagList.inputValue) {
+        if (
+          (form.tags as Array<Tag>).every((tag) => {
+            return tag.name != tagList.inputValue;
+          })
+        ) {
+          let newTag = { name: tagList.inputValue, color: randomColor() };
+          (form.tags as Array<Tag>).push(newTag);
         }
       }
       tagList.inputVisible = false;
-      tagList.inputValue = ''
-    }
+      tagList.inputValue = "";
+    };
+    const add = async () => {
+      await server.request({
+        url: "/api/addArticle",
+        method: "post",
+        data: { ...form },
+      });
+    };
 
     return {
       categories,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
-      form,
-      source,
-      tagList,handleClose,showInput,handleInputConfirm,input
+      ...toRefs(form),
+      tagList,
+      handleClose,
+      showInput,
+      handleInputConfirm,
+      input,
+      add,
     };
   },
 });

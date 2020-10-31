@@ -6,95 +6,93 @@
 <template>
   <div class="articleList-wrap">
     <div class="table-top">
-      <a-button type="primary" @click="addArticle">添加</a-button>
+      <a-button type="primary" @click="add">添加</a-button>
     </div>
     <div class="table">
-      <a-table :columns="columns" :data-source="data" rowKey="id" bordered>
-        <template v-slot:tags="{ text: tags }">
-          <span>
-            <a-tag
-              v-for="tag in tags"
-              :key="tag"
-              :color="
-                tag === 'loser'
-                  ? 'volcano'
-                  : tag.length > 5
-                  ? 'geekblue'
-                  : 'green'
-              "
-            >
-              {{ tag.toUpperCase() }}
+      <a-table
+        :data-source="articleList.list"
+        rowKey="id"
+        bordered
+        :pagination="false"
+      >
+        <a-table-column key="id" title="id" data-index="id" :width="80" />
+        <a-table-column
+          key="title"
+          title="标题"
+          data-index="title"
+          :width="200"
+        />
+        <a-table-column key="tags" title="标签">       
+          <template v-slot="{ record }">
+            <a-tag v-for="tag in record.tags" :key="tag" :color="tag.color" >
+              {{ tag.name }}
             </a-tag>
-          </span>
-        </template>
+          </template>
+        </a-table-column>
+        <a-table-column
+          key="category_name"
+          title="类别"
+          data-index="category_name"
+          :width="100"
+        />
+        <a-table-column
+          key="create_time"
+          title="添加时间"
+          data-index="create_time"
+        />
+        <a-table-column
+          key="update_time"
+          title="更新时间"
+          data-index="update_time"
+        />
+        <a-table-column key="action" title="操作" :width="100">
+          <template v-slot="{ record }">
+            <a-button
+              class="btn"
+              type="danger"
+              size="small"
+              @click="remove(record)"
+            >
+              删除
+            </a-button>
+          </template>
+        </a-table-column>
       </a-table>
+      <div class="paging">
+        <a-pagination
+          :total="articleList.pagination.total"
+          :showTotal="() => `Total ${articleList.pagination.total}`"
+          show-quick-jumper
+          @change="jump"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import useGetData from "./ts/useGetData";
 export default defineComponent({
   name: "ArticleList",
-  components: {
-    SmileOutlined,
-    DownOutlined,
-  },
   setup() {
-    const router = useRouter()
-    const addArticle = () => {
-      router.push('/addArticle')
+    const router = useRouter();
+    const add = () => {
+      router.push("/addArticle");
     };
+    const { articleList, getData } = useGetData();
+    const jump = (curr:number) => {
+      getData(curr)
+    };
+    const edit = () => {};
+    const remove = () => {};
     return {
-      addArticle,
-      columns: [
-        {
-          title: "id",
-          dataIndex: "id",
-          key: "id",
-        },
-        {
-          title: "文章标题",
-          dataIndex: "title",
-          key: "title",
-        },
-        {
-          title: "所属分类",
-          dataIndex: "category",
-          key: "category",
-        },
-        {
-          title: "技术栈",
-          key: "tags",
-          dataIndex: "tags",
-          slots: { customRender: "tags" },
-        },
-      ],
-      data: [
-        {
-          id: "1",
-          name: "John Brown",
-          title: "JavaScript基础",
-          category: "JavaScript基础",
-          tags: ["nice", "developer"],
-        },
-        {
-          id: "2",
-          name: "Jim Green",
-          title: "Html/Css基础",
-          category: "Html",
-          tags: ["loser"],
-        },
-        {
-          id: "3",
-          name: "Joe Black",
-          title: "Webpack实践",
-          category: "Webpack",
-          tags: ["cool", "teacher"],
-        },
-      ],
+      articleList,
+      add,
+      edit,
+      remove,
+      jump,
     };
   },
 });
