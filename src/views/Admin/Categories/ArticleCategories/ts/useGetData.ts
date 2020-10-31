@@ -2,12 +2,13 @@ import server from "@/utils/axios";
 import { onMounted, reactive } from "vue";
 import { ArtCategories, ArtCategoryArr, Pagination } from "./types";
 import { formatDate } from '@/utils/utils'
+import api from '@/utils/api'
 export default function useGetData() {
   let articlesList: ArtCategories = reactive({ list: [], pagination: {} });
   const getData = async (pageNum: number) => {
     articlesList.list = [];
     let res = await server.request({
-      url: "/api/artList",
+      url: api.artList,
       method: "post",
       data: {
         pageNum,

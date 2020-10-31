@@ -1,6 +1,7 @@
 import { onMounted, reactive } from "vue";
 import server from "@/utils/axios";
 import { Categories } from "./types";
+import api from '@/utils/api'
 export default function useGetCates() {
   const categories: Categories = reactive({
     list: [],
@@ -8,7 +9,7 @@ export default function useGetCates() {
   });
   const getCates = async (pageNum: number) => {
     let res = await server.request({
-      url: "/api/artList",
+      url: api.artList,
       method: "post",
       data: {
         pageNum,

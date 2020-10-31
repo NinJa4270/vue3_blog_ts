@@ -6,7 +6,7 @@ import { Ref } from "vue";
 import { useStore } from "vuex";
 import { setStorage } from "@/utils/storage.ts";
 import { useRouter } from "vue-router";
-
+import api from '@/utils/api'
 export default function useLoginSubmit(
   formData: LoginForm,
   rules: RulesObj,
@@ -21,7 +21,7 @@ export default function useLoginSubmit(
     validate()
       .then(async () => {
         let res = await server.request({
-          url: "/api/login",
+          url: api.login,
           method: "post",
           data: { ...formData },
         });

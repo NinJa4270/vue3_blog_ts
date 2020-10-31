@@ -80,6 +80,7 @@ import { useForm } from "@ant-design-vue/use";
 import useGetData from "./ts/useGetData";
 import { ArtCategoryArr } from "./ts/types";
 import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
+import api from '@/utils/api'
 export default defineComponent({
   name: "ArticleCategories",
   components: {
@@ -101,7 +102,7 @@ export default defineComponent({
     })
     const add = async () => {
       await server.request({
-        url: "/api/addArt",
+        url: api.addArt,
         method: "post",
         data: {
           name: addData.newValue,
@@ -129,7 +130,7 @@ export default defineComponent({
     };
     const remove = async (record: ArtCategoryArr) => {
       await server.request({
-        url: "/api/deleteArt",
+        url: api.deleteArt,
         method: "post",
         data: {
           id: record.id,

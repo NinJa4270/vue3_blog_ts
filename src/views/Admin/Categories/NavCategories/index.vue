@@ -101,6 +101,7 @@ import useGetData from "./ts/useGetData";
 import { NavList, NavListArr } from "@/views/Layout/ts/types";
 import server from "@/utils/axios";
 import { useForm } from "@ant-design-vue/use";
+import api from '@/utils/api'
 export default defineComponent({
   name: "NavCategories",
   setup() {
@@ -148,7 +149,7 @@ export default defineComponent({
 
     const remove = async (item: NavListArr) => {
       let { data: res } = await server.request({
-        url: "/api/deleteNav",
+        url: api.deleteNav,
         method: "post",
         data: { id: item.id },
       });
@@ -172,13 +173,13 @@ export default defineComponent({
     const submit = async () => {
       if (dialogConfig.title === "修改导航分类") {
         let { data: res } = await server.request({
-          url: "/api/editNav",
+          url: api.editNav,
           method: "post",
           data: { id: dialogConfig.id, ...form },
         });
       } else if (dialogConfig.title === "增加导航分类") {
         let { data: res } = await server.request({
-          url: "/api/addNav",
+          url: api.addNav,
           method: "post",
           data: { ...form },
         });

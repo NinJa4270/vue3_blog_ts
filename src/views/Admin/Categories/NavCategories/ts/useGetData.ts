@@ -1,13 +1,13 @@
 import server from "@/utils/axios";
 import { onMounted, reactive } from "vue";
 import { NavList, NavListArr } from "@/views/Layout/ts/types";
-
+import api from '@/utils/api'
 export default function useGetData() {
   let navList: NavList = reactive({list:[]});
   const getNav = async () => {
     navList.list = []
     let res = await server.request({
-      url: "/api/nav",
+      url: api.nav,
       method: "post",
       data: { role_id: 1 },
     });

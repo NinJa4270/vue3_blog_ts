@@ -2,13 +2,14 @@ import server from "@/utils/axios";
 import { User, Pagination, UserList } from "./types";
 import { onMounted, reactive } from "vue";
 import { formatDate } from "@/utils/utils";
+import api from '@/utils/api'
 export default function useGetData() {
   let userList: UserList = reactive({ list: [], pagination: {} });
 
   const getData = async (pageNum: number) => {
     userList.list = [];
     let res = await server.request({
-      url: "/api/userList",
+      url: api.userList,
       method: "post",
       data: {
         pageNum,

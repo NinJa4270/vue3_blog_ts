@@ -98,6 +98,7 @@ import { defineComponent, reactive, ref } from "vue";
 import useGetData from "./ts/useGetData";
 import { User } from "./ts/types";
 import server from "@/utils/axios";
+import api from '@/utils/api'
 export default defineComponent({
   name: "User",
   setup() {
@@ -145,7 +146,7 @@ export default defineComponent({
     };
     const remove = async (item: User) => {
       await server.request({
-        url: "/api/deleteUser",
+        url: api.deleteUser,
         method: "post",
         data: { id: item.id },
       });
@@ -154,14 +155,14 @@ export default defineComponent({
     const submit = async (type: string) => {
       if (dialogConfig.type === "add") {
         await server.request({
-          url: "/api/addUser",
+          url: api.addUser,
           method: "post",
           data: { ...form },
         });
       } else if (dialogConfig.type === "edit") {
         if (dialogConfig.id !== 0) {
           await server.request({
-            url: "/api/editUser",
+            url: api.editUser,
             method: "post",
             data: { id: dialogConfig.id, ...form },
           });

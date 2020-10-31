@@ -1,16 +1,17 @@
 import { onMounted, reactive } from "vue";
 import server from "@/utils/axios";
 import { Article } from "./types";
+import api from '@/utils/api'
 export default function useGetArticle(id: string) {
   const form: Article = reactive({
     title: "",
     category: undefined,
     tags: [],
-    source: ``,
+    source: "",
   });
   const getArticle = async () => {
     let res = await server.request({
-      url: "/api/article",
+      url: api.article,
       method: "post",
       data: {
         id,
@@ -24,7 +25,6 @@ export default function useGetArticle(id: string) {
   };
   onMounted(() => {
     id && getArticle();
-    console.log(form)
   });
   return { form };
 }

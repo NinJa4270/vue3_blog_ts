@@ -84,6 +84,7 @@ import { useRouter } from "vue-router";
 import useGetData from "./ts/useGetData";
 import { Article } from "./ts/types";
 import server from "@/utils/axios";
+import api from '@/utils/api'
 export default defineComponent({
   name: "ArticleList",
   setup() {
@@ -100,7 +101,7 @@ export default defineComponent({
     };
     const remove = async (item: Article) => {
       await server.request({
-        url: "/api/deleteArticle",
+        url: api.deleteArticle,
         method: "post",
         data: {
           id: item.id,

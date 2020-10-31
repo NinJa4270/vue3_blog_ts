@@ -81,6 +81,7 @@ import { randomColor } from "@/utils/utils";
 import server from "@/utils/axios";
 import { useRoute } from "vue-router";
 import useGetArticle from "./ts/useGetArticle";
+import api from '@/utils/api'
 export default defineComponent({
   name: "AddArticle",
   components: {
@@ -129,7 +130,7 @@ export default defineComponent({
     const add = async () => {
       if (!id) {
         await server.request({
-          url: "/api/addArticle",
+          url: api.addArticle,
           method: "post",
           data: {
             title: form.title,
@@ -140,7 +141,7 @@ export default defineComponent({
         });
       } else if (id) {
         await server.request({
-          url: "/api/editArticle",
+          url: api.editArticle,
           method: "post",
           data: {
             id,

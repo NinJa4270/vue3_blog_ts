@@ -1,6 +1,7 @@
 import { LoginForm } from "./types";
 import server from "@/utils/axios";
 import { ref, Ref } from 'vue';
+import api from '@/utils/api'
 export default function useCode(formData: LoginForm, btnStatus: any) {
   const timer: Ref = ref(null);
 
@@ -14,7 +15,7 @@ export default function useCode(formData: LoginForm, btnStatus: any) {
       text: "发送中",
     });
     let res = await server.request({
-      url: "/api/nodemailer",
+      url: api.nodemailer,
       method: "post",
       data: { user: formData.user },
     });
