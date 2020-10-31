@@ -1,6 +1,6 @@
 import { onMounted, reactive } from "vue";
 import server from "@/utils/axios";
-import { Categories } from "./types";
+import { Categories } from '@/types'
 import api from '@/utils/api'
 export default function useGetCates() {
   const categories: Categories = reactive({

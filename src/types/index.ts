@@ -1,3 +1,12 @@
+export interface DateFmt {
+  "M+"?: number;
+  "d+"?: number;
+  "h+"?: number;
+  "m+"?: number;
+  "s+"?: number;
+  "q+"?: number;
+  S?: number;
+}
 export interface Categories {
   list: Category[];
   pagination: Pagination;
@@ -33,3 +42,4 @@ export interface Article {
   tags:Array<Tag>;
   source?:string;
 }
+

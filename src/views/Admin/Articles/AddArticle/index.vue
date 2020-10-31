@@ -76,7 +76,7 @@ import { UploadOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import Editor from "@/components/Editor.vue";
 import useGetCates from "./ts/useGetCates";
-import { TagList, Tag, Article } from "./ts/types";
+import { TagList, Tag, Article } from '@/types'
 import { randomColor } from "@/utils/utils";
 import server from "@/utils/axios";
 import { useRoute } from "vue-router";

@@ -1,6 +1,6 @@
 import { onMounted, reactive } from "vue";
 import server from "@/utils/axios";
-import { Article } from "./types";
+import { Article } from "@/types";
 import api from '@/utils/api'
 export default function useGetArticle(id: string) {
   const form: Article = reactive({

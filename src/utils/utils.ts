@@ -1,12 +1,4 @@
-interface DateFmt {
-  "M+"?: number;
-  "d+"?: number;
-  "h+"?: number;
-  "m+"?: number;
-  "s+"?: number;
-  "q+"?: number;
-  S?: number;
-}
+import { DateFmt } from '@/types/index'
 export function formatDate(value: string, fmt?: string, emptyText?: string) {
   fmt = fmt || "yyyy-MM-dd hh:mm:ss";
   if (!value) return emptyText || "";
