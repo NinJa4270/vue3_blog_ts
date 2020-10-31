@@ -41,9 +41,11 @@ export function formatDate(value: string, fmt?: string, emptyText?: string) {
 }
 //十六进制颜色随机
 export function randomColor() {
-  var r = Math.floor(Math.random() * 256);
-  var g = Math.floor(Math.random() * 256);
-  var b = Math.floor(Math.random() * 256);
-  var color = "#" + r.toString(16) + g.toString(16) + b.toString(16);
-  return color;
+  function makeC() {
+    return Math.floor(Math.random() * 256).toString(16);
+  }
+  function add0(str: string) {
+    return str.length < 2 ? str + "0" : str;
+  }
+  return "#" + add0(makeC()) + add0(makeC()) + add0(makeC());
 }
