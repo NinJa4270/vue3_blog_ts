@@ -22,9 +22,9 @@
           data-index="title"
           :width="200"
         />
-        <a-table-column key="tags" title="标签">       
+        <a-table-column key="tags" title="标签">
           <template v-slot="{ record }">
-            <a-tag v-for="tag in record.tags" :key="tag" :color="tag.color" >
+            <a-tag v-for="tag in record.tags" :key="tag" :color="tag.color">
               {{ tag.name }}
             </a-tag>
           </template>
@@ -74,6 +74,8 @@
 import { defineComponent, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import useGetData from "./ts/useGetData";
+import { Article } from "./ts/types";
+import server from "@/utils/axios";
 export default defineComponent({
   name: "ArticleList",
   setup() {
@@ -82,11 +84,20 @@ export default defineComponent({
       router.push("/addArticle");
     };
     const { articleList, getData } = useGetData();
-    const jump = (curr:number) => {
-      getData(curr)
+    const jump = (curr: number) => {
+      getData(curr);
     };
-    const edit = () => {};
-    const remove = () => {};
+    const edit = (item: Article) => {};
+    const remove = async (item: Article) => {
+      await server.request({
+        url: "/api/deleteArticle",
+        method: "post",
+        data: {
+          id:item.id
+        },
+      });
+      getData(1)
+    };
     return {
       articleList,
       add,
