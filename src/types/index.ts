@@ -1,3 +1,16 @@
+// vuex
+export interface IState {
+  userInfo: IUserInfo;
+  token: string;
+  isLogin: boolean;
+}
+export interface IUserInfo {
+  user?: string;
+  role_name?: string;
+  role?: string;
+  role_id?: number;
+}
+
 export interface DateFmt {
   "M+"?: number;
   "d+"?: number;
@@ -42,4 +55,5 @@ export interface Article {
   tags:Array<Tag>;
   source?:string;
 }
+
 

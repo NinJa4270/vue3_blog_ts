@@ -27,14 +27,9 @@ export default function useLoginSubmit(
         });
         if (res.data.code == 1000) {
           message.success("登陆成功");
-          if (checked.value) {
-            // 储存到localStorage中
-            setStorage("userInfo", res.data.data);
-            setStorage("token", res.data.data.token);
-          }
           // 储存到vuex
-          store.commit("SET_USERINFO", res.data.data);
-          store.commit("SET_TOKEN", res.data.data.token);
+          store.dispatch('SET_USERINFO',res.data.data)
+          store.dispatch('SET_TOKEN',res.data.data.token)
           router.push("/main");
         }
       })

@@ -2,7 +2,7 @@ import server from "@/utils/axios";
 import { getStorage } from "@/utils/storage.ts";
 import { onMounted, reactive } from "vue";
 import { NavList, NavListArr } from "./types";
-
+import api from '@/utils/api'
 export default function useNav() {
   let navList: NavList = reactive({ list: [] });
   const getNav = async () => {
@@ -12,7 +12,7 @@ export default function useNav() {
       data = getStorage("userInfo");
     }
     let res = await server.request({
-      url: "/api/nav",
+      url: api.nav,
       method: "post",
       data,
     });

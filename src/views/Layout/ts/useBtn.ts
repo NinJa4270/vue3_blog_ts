@@ -10,7 +10,7 @@ export default function useBtn(getNav:Function) {
   };
   const logout = () => {
     message.success("登出成功");
-    store.commit("SET_USERINFO");
+    store.dispatch('SET_USERINFO')
     // 调用登出接口
     getNav()
     router.push("./main");
