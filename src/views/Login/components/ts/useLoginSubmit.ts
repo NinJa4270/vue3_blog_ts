@@ -3,9 +3,8 @@ import { LoginForm, RulesObj } from "./types";
 import server from "@/utils/axios";
 import { message } from "ant-design-vue";
 import { Ref } from "vue";
-import { useStore } from "vuex";
-import { setStorage } from "@/utils/storage.ts";
-import { useRouter } from "vue-router";
+import { Store, useStore } from "vuex";
+import { Router, useRouter } from "vue-router";
 import api from '@/utils/api'
 export default function useLoginSubmit(
   formData: LoginForm,
@@ -13,8 +12,8 @@ export default function useLoginSubmit(
   checked: Ref<boolean>
 ) {
   const { resetFields, validate, validateInfos } = useForm(formData, rules);
-  const store = useStore();
-  const router = useRouter();
+  const store:Store<any> = useStore();
+  const router:Router = useRouter();
   
   const onSubmit = (e: Event) => {
     e.preventDefault();

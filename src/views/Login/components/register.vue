@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import useValidator from "./ts/useValidator";
 import useRegSubmit from "./ts/useRegSubmit";
 import useCode from "./ts/useCode";
@@ -89,7 +89,7 @@ export default defineComponent({
   emits: ["update:activeIndex"],
   props: {
     activeIndex: {
-      type: Number,
+      type: Number as PropType<number>,
       default: 1,
     },
   },

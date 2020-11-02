@@ -1,7 +1,9 @@
 <!--
-* @fileName Login
+* @description
+* @fileName login
+* @directory C:\Users\Administrator\Desktop\blog\src\views\Login\components
 * @author yq
-* @date 2020/11/02 16:45:19
+* @date 2020/10/11 16:39:25
 !-->
 <template>
   <div class="login-component">
@@ -9,11 +11,9 @@
       class="form"
       :label-col="formStyle.labelCol"
       :wrapper-col="formStyle.wrapperCol"
-      ref="ruleForm"
-      :model="formData"
       :rules="loginRules"
     >
-      <a-form-item label="用户名" name="user" required has-feedback>
+      <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
         <a-input
           v-model:value="formData.user"
           placeholder="Username"
@@ -21,11 +21,12 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="密码" name="password" required has-feedback>
+      <a-form-item label="密码" has-feedback v-bind="validateInfos.password">
         <a-input
           v-model:value="formData.password"
           type="password"
           placeholder="Password"
+          autocomplete="off"
         >
         </a-input>
       </a-form-item>
@@ -54,49 +55,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, Ref, ref } from "vue";
-import { ILoginForm } from "@/types/login";
-import { getStorage } from "@/utils/storage";
-import useValidator from '@/hooks/Login/useValidator';
-import useLoginBtns from '@/hooks/Login/useLoginBtns'
+import { defineComponent } from "vue";
+import useValidator from "./ts/useValidator";
+import useLoginSubmit from "./ts/useLoginSubmit";
+import useLoginInit from './ts/useLoginInit'
 export default defineComponent({
   name: "Login",
   setup() {
-    // 初始化
-    const formData = reactive<ILoginForm>({
-      user: "",
-      password: "",
-    });
-    const checked = ref<boolean>(false);
-    const ruleForm = ref<string | null>(null)
-    onMounted(() => {
-      if (getStorage("userInfo")) {
-        formData.user = getStorage("userInfo").user;
-      }
-    });
-    const { validateUsername,validatePassword }  = useValidator()
-    const loginRules = reactive({
-        user: [{ validator: validateUsername, trigger: 'change' }],
-        password: [{ validator: validatePassword, trigger: 'change' }]
-    });
-    const { submit, reset } = useLoginBtns(ruleForm)
-    const onSubmit = ()=>{
-      submit(formData)
-    }
-    const resetForm = ()=>{
-      reset()
-    }
+    const { formData,checked } = useLoginInit()
+    const { loginRules } = useValidator(formData);
+    const { onSubmit, resetForm, validateInfos } = useLoginSubmit(formData,loginRules,checked); 
     return {
+      checked,
+      // 表单样式
       formStyle: {
         labelCol: { span: 5 },
         wrapperCol: { span: 18 },
       },
       formData,
-      checked,
-      ruleForm,
       loginRules,
       onSubmit,
       resetForm,
+      validateInfos,
     };
   },
 });

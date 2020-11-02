@@ -101,7 +101,7 @@ export default defineComponent({
       inputVisible: false,
       inputValue: "",
     });
-    const input: any = ref(null);
+    const input = ref<any>(null);
     const handleClose = (removedTag: string) => {
       form.tags = (form.tags as Array<Tag>).filter(
         (tag) => tag.name !== removedTag

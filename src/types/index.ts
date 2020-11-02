@@ -50,10 +50,8 @@ export interface TagList {
 }
 
 export interface Article {
-  title?:string;
+  title?: string;
   category?: string;
-  tags:Array<Tag>;
-  source?:string;
+  tags: Array<Tag>;
+  source?: string;
 }
-
-
