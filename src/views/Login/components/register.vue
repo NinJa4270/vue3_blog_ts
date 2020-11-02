@@ -11,9 +11,11 @@
       class="form"
       :label-col="formStyle.labelCol"
       :wrapper-col="formStyle.wrapperCol"
+      ref="ruleForm"
+      :model="formData"
       :rules="regRules"
     >
-      <a-form-item label="用户名" has-feedback v-bind="validateInfos.user">
+      <a-form-item label="用户名" name="user" required has-feedback>
         <a-input
           v-model:value="formData.user"
           placeholder="Username"
@@ -21,7 +23,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="密码" has-feedback v-bind="validateInfos.password">
+      <a-form-item label="密码" name="password" required has-feedback>
         <a-input
           v-model:value="formData.password"
           type="password"
@@ -30,11 +32,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item
-        label="确认密码"
-        has-feedback
-        v-bind="validateInfos.password2"
-      >
+      <a-form-item label="确认密码" name="password2" required has-feedback>
         <a-input
           v-model:value="formData.password2"
           type="password"
@@ -43,7 +41,7 @@
         >
         </a-input>
       </a-form-item>
-      <a-form-item label="验证码" v-bind="validateInfos.code">
+      <a-form-item label="验证码" name="code" required>
         <div class="code">
           <a-input
             class="code-content"
@@ -79,11 +77,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import useValidator from "./ts/useValidator";
+import { defineComponent, PropType, reactive, ref } from "vue";
 import useRegSubmit from "./ts/useRegSubmit";
-import useCode from "./ts/useCode";
-import useRegInit from "./ts/useRegInit";
+import useCode from "@/hooks/Login/useCode";
+import { IBtnStatus, IRegisterForm } from "@/types/login";
+import useValidator from "@/hooks/Login/useValidator";
+import useLoginBtns from "@/hooks/Login/useLoginBtns";
 export default defineComponent({
   name: "Register",
   emits: ["update:activeIndex"],
@@ -94,14 +93,43 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const { formData, btnStatus } = useRegInit();
-    const { regRules } = useValidator(formData);
-    const { onSubmit, resetForm, validateInfos } = useRegSubmit(
-      formData,
-      regRules,
-      emit
-    );
+    // 初始化
+    const formData = reactive<IRegisterForm>({
+      user: "",
+      password: "",
+      password2: "",
+      code: "",
+    });
+    const btnStatus = reactive<IBtnStatus>({
+      loading: false,
+      disabled: false,
+      text: "验证码",
+    });
+    const ruleForm = ref<string | null>(null);
+    const {
+      validateUsername,
+      validatePassword,
+      validatePassword2,
+      validateCode,
+    } = useValidator(formData);
+    const regRules = reactive({
+      user: [{ validator: validateUsername, trigger: "change" }],
+      password: [{ validator: validatePassword, trigger: "change" }],
+      password2: [{ validator: validatePassword2, trigger: "change" }],
+      code: [{ validator: validateCode, trigger: "change" }],
+    });
+    const { submit, reset } = useLoginBtns(ruleForm);
     const { getCode } = useCode(formData, btnStatus);
+
+    const onSubmit = (): void => {
+      console.log(submit("register", formData))
+      if (submit("register", formData)) {
+        emit("update:activeIndex", 0);
+      }
+    };
+    const resetForm = (): void => {
+      reset();
+    };
 
     return {
       formStyle: {
@@ -110,11 +138,12 @@ export default defineComponent({
       },
       formData,
       regRules,
+      ruleForm,
+
       btnStatus,
       onSubmit,
       resetForm,
       getCode,
-      validateInfos,
     };
   },
 });

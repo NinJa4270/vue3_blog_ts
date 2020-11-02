@@ -1,12 +1,21 @@
-import { LoginForm } from "./types";
+import { IBtnStatus, IRegisterForm } from "@/types/login";
+import api from "@/utils/api";
 import server from "@/utils/axios";
-import { ref, Ref } from 'vue';
-import api from '@/utils/api'
-export default function useCode(formData: LoginForm, btnStatus: any) {
-  const timer: Ref = ref(null);
+import { message } from "ant-design-vue";
+import { Ref, ref } from "vue";
+interface IUseCode {
+  getCode: (formData: IRegisterForm, btnStatus: IBtnStatus) => void;
+  updateStatus: (data: IBtnStatus) => void;
+}
 
-  const getCode = async () => {
+export default function useCode(
+  formData: IRegisterForm,
+  btnStatus: IBtnStatus
+): IUseCode {
+  const timer: Ref = ref(null);
+  async function getCode() {
     if (!formData.user) {
+      message.error("用户名不能为空");
       return;
     }
     updateStatus({
@@ -19,16 +28,22 @@ export default function useCode(formData: LoginForm, btnStatus: any) {
       method: "post",
       data: { user: formData.user },
     });
-    countDown(60);
-  };
-
-  const updateStatus = (data: typeof btnStatus) => {
+    if (res.data.code === 1000) {
+      countDown(60);
+    } else {
+      updateStatus({
+        loading: false,
+        disabled: false,
+        text: "再次获取",
+      });
+    }
+  }
+  function updateStatus(data: IBtnStatus): void {
     btnStatus.loading = data.loading;
     btnStatus.disabled = data.disabled;
     btnStatus.text = data.text;
-  };
-  const countDown = (number: number) => {
-    // 预防多次点击 判断定时器是否存在
+  }
+  function countDown(number: number): void {
     if (timer.value) {
       clearCountDown(timer.value);
     }
@@ -47,10 +62,10 @@ export default function useCode(formData: LoginForm, btnStatus: any) {
         btnStatus.text = `${number}S`;
       }
     }, 1000);
-  };
-  const clearCountDown = (timer: Ref) => {
+  }
+  function clearCountDown(timer: Ref): void {
     clearInterval(timer.value);
-  };
+  }
 
-  return { getCode };
+  return { getCode, updateStatus };
 }

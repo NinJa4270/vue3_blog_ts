@@ -7,3 +7,8 @@ export interface IRegisterForm extends ILoginForm {
   password2?: string;
   code?: string;
 }
+export interface IBtnStatus {
+  loading: boolean;
+  disabled: boolean;
+  text: string;
+}

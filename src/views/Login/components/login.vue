@@ -30,10 +30,7 @@
         </a-input>
       </a-form-item>
       <a-form-item :wrapper-col="{ offset: 5, span: 18 }">
-        <div style="display:flex;justify-content: space-between;">
-          <a-checkbox v-model:checked="checked">
-            记住密码
-          </a-checkbox>
+        <div style="display:flex;justify-content: flex-end;">
           <a>
             忘记密码
           </a>
@@ -67,7 +64,6 @@ export default defineComponent({
       user: "",
       password: "",
     });
-    const checked = ref<boolean>(false);
     const ruleForm = ref<string | null>(null)
     onMounted(() => {
       if (getStorage("userInfo")) {
@@ -80,10 +76,10 @@ export default defineComponent({
         password: [{ validator: validatePassword, trigger: 'change' }]
     });
     const { submit, reset } = useLoginBtns(ruleForm)
-    const onSubmit = ()=>{
-      submit(formData)
+    const onSubmit = ():void =>{
+      submit('login',formData)
     }
-    const resetForm = ()=>{
+    const resetForm = ():void =>{
       reset()
     }
     return {
@@ -92,7 +88,6 @@ export default defineComponent({
         wrapperCol: { span: 18 },
       },
       formData,
-      checked,
       ruleForm,
       loginRules,
       onSubmit,
