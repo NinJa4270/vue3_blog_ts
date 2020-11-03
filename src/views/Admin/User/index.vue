@@ -10,7 +10,7 @@
         <a-button type="primary" @click="add">添加用户</a-button>
       </div>
       <a-table
-        :data-source="userList.list"
+        :data-source="users.list"
         rowKey="id"
         bordered
         :pagination="false"
@@ -58,8 +58,8 @@
       </a-table>
       <div class="paging">
         <a-pagination
-          :total="userList.pagination.total"
-          :showTotal="() => `Total ${userList.pagination.total}`"
+          :total="users.pagination.total"
+          :showTotal="() => `Total ${users.pagination.total}`"
           show-quick-jumper
           @change="jump"
         />
@@ -70,15 +70,15 @@
       v-model:visible="dialogConfig.visible"
       @ok="submit"
     >
-      <a-form>
-        <a-form-item label="用户名" required>
-          <a-input v-model:value="form.user" />
+      <a-form ref="ruleForm" :model="userForm" :rules="userRules">
+        <a-form-item label="用户名" name="user" required has-feedback>
+          <a-input v-model:value="userForm.user" />
         </a-form-item>
-        <a-form-item label="密码" required>
-          <a-input type="password" v-model:value="form.password" />
+        <a-form-item label="密码" name="password" required has-feedback>
+          <a-input type="password" v-model:value="userForm.password" />
         </a-form-item>
-        <a-form-item label="权限等级" required>
-          <a-select v-model:value="form.role_id">
+        <a-form-item label="权限等级">
+          <a-select v-model:value="userForm.role_id">
             <a-select-option
               :value="item.value"
               v-for="(item, index) in roleSelect"
@@ -94,57 +94,65 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import useGetData from "./ts/useGetData";
-import { User } from "./ts/types";
+import { defineComponent, reactive, Ref, ref } from "vue";
 import server from "@/utils/axios";
 import api from '@/utils/api'
+import useGetUsers from '@/hooks/GetData/useGetUsers'
+import { IUsersItem } from "@/types/getData";
+import { IUserDialogConfig, IUserForm, ISelectItem } from '@/types/category'
+import useValidator from '@/hooks/Login/useValidator';
+import { message } from 'ant-design-vue';
 export default defineComponent({
   name: "User",
   setup() {
-    const { userList, getData } = useGetData();
-
-    const dialogConfig = reactive({
+    const { users, getUsersData } = useGetUsers();
+    const dialogConfig = reactive<IUserDialogConfig>({
       title: "",
       visible: false,
       type: "",
       id: 0,
     });
-    const form = reactive({
+    const userForm = reactive<IUserForm>({
       user: "",
       password: "",
       role_id: 0,
     });
-    const roleSelect = [
+    const roleSelect:Array<ISelectItem> = [
       { value: 0, label: "user" },
       { value: 1, label: "admin" },
     ];
-    const init = () => {
+    let ruleForm = ref<string | null>(null);
+    const { validateUsername,validatePassword }  = useValidator()
+    const userRules = {
+      user:[{ validator: validateUsername, trigger: 'change' }],
+      password:[{ validator: validatePassword, trigger: 'change' }]
+    }
+    const init = ():void => {
       dialogConfig.visible = false;
       dialogConfig.title = "";
       dialogConfig.type = "";
       dialogConfig.id = 0;
-      form.user = "";
-      form.password = "";
-      form.role_id = 0;
+      userForm.user = "";
+      userForm.password = "";
+      userForm.role_id = 0;
     };
-    const jump = (curr: number) => {
-      getData(curr);
+    const jump = (curr: number):void => {
+      getUsersData(curr);
     };
-    const add = async (item: User) => {
+    const add = async (item: IUsersItem):Promise<void> => {
       dialogConfig.visible = true;
       dialogConfig.title = "添加用户";
       dialogConfig.type = "add";
     };
-    const edit = async (item: User) => {
+    const edit = async (item: IUsersItem):Promise<void>  => {
       dialogConfig.visible = true;
       dialogConfig.title = "修改用户";
       dialogConfig.type = "edit";
       dialogConfig.id = item.id;
-      form.user = item.user;
-      form.role_id = item.role_id;
+      userForm.user = item.user;
+      userForm.role_id = item.role_id;
     };
-    const remove = async (item: User) => {
+    const remove = async (item: IUsersItem):Promise<void>  => {
       await server.request({
         url: api.deleteUser,
         method: "post",
@@ -152,35 +160,53 @@ export default defineComponent({
       });
       jump(1);
     };
-    const submit = async (type: string) => {
+    const submit = (type: string):void  => {
       if (dialogConfig.type === "add") {
-        await server.request({
-          url: api.addUser,
-          method: "post",
-          data: { ...form },
+        (ruleForm as Ref).value.validate().then(async () => {
+          let res = await server.request({
+            url: api.addUser,
+            method: "post",
+            data: { ...userForm },
+          });
+          if (res.data.code == 1000) {
+            message.success("添加成功")
+            init()
+            jump(1);
+          }
+        }).catch((err: Error) => {
+          console.log("error", err);
         });
       } else if (dialogConfig.type === "edit") {
         if (dialogConfig.id !== 0) {
-          await server.request({
-            url: api.editUser,
-            method: "post",
-            data: { id: dialogConfig.id, ...form },
+          (ruleForm as Ref).value.validate().then(async () => {
+            let res = await server.request({
+              url: api.editUser,
+              method: "post",
+              data: { id: dialogConfig.id, ...userForm },
+            });
+            if (res.data.code == 1000) {
+              message.success("添加成功")
+              init()
+              jump(1);
+            }
+          }).catch((err: Error) => {
+            console.log("error", err);
           });
         }
       }
-      init()
-      jump(1);
     };
     return {
-      userList,
+      users,
       dialogConfig,
       roleSelect,
-      form,
       jump,
       add,
       edit,
       remove,
       submit,
+      userForm,
+      ruleForm,
+      userRules
     };
   },
 });

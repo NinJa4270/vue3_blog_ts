@@ -4,11 +4,11 @@ import server from "@/utils/axios";
 import { formatDate } from "@/utils/utils";
 import { onMounted, reactive } from "vue";
 interface IuseGetArtCate {
-  articlesList: IArtCate;
+  articles: IArtCate;
   getArtCateData: (pageNum:number) => Promise<void>;
 }
 export default function useGetArtCate(): IuseGetArtCate {
-  let articlesList: IArtCate = reactive({ list: [], pagination: {} });
+  let articles: IArtCate = reactive({ list: [], pagination: {} });
   async function getArtCateData(pageNum: number):Promise<void> {
     let res = await server.request({
       url: api.artList,
@@ -24,8 +24,8 @@ export default function useGetArtCate(): IuseGetArtCate {
       item.update_time = formatDate(item.update_time as string);
       return item;
     });
-    (articlesList.list as Array<IArtCateItem>) = res.data.data.list || [];
-    (articlesList.pagination as Pagination) = {
+    (articles.list as Array<IArtCateItem>) = res.data.data.list || [];
+    (articles.pagination as Pagination) = {
       total: res.data.data.total || 0,
       hasNextPage: res.data.data.hasNextPage || false,
       totalPage: res.data.data.totalPage || 0,
@@ -34,5 +34,5 @@ export default function useGetArtCate(): IuseGetArtCate {
   onMounted(() => {
     getArtCateData(1);
   });
-  return { articlesList, getArtCateData };
+  return { articles, getArtCateData };
 }

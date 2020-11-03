@@ -1,13 +1,13 @@
+import { IUsers, IUsersItem, Pagination } from "@/types/getData";
+import api from "@/utils/api";
 import server from "@/utils/axios";
-import { User, Pagination, UserList } from "./types";
-import { onMounted, reactive } from "vue";
 import { formatDate } from "@/utils/utils";
-import api from '@/utils/api'
-export default function useGetData() {
-  let userList: UserList = reactive({ list: [], pagination: {} });
+import { onMounted, reactive } from "vue";
 
-  const getData = async (pageNum: number) => {
-    userList.list = [];
+export default function useGetUsers() {
+  let users: IUsers = reactive({ list: [], pagination: {} });
+  
+  async function getUsersData(pageNum: number) {
     let res = await server.request({
       url: api.userList,
       method: "post",
@@ -17,21 +17,21 @@ export default function useGetData() {
       },
     });
     let list = res.data.data.list;
-    list.map((item: User) => {
+    list.map((item: IUsersItem) => {
       item.create_time = formatDate(item.create_time);
       item.update_time = formatDate(item.update_time);
       return item;
     });
-    (userList.list as User[]).push(...list);
-    (userList.pagination as Pagination) = {
+    (users.list as Array<IUsersItem>) = list;
+    (users.pagination as Pagination) = {
       total: res.data.data.total || 0,
       hasNextPage: res.data.data.hasNextPage || false,
       totalPage: res.data.data.totalPage || 0,
     };
-  };
+  }
 
   onMounted(() => {
-    getData(1);
+    getUsersData(1);
   });
-  return { userList, getData };
+  return { users, getUsersData };
 }

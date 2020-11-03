@@ -36,3 +36,19 @@ export interface IArtCateItem {
   update_time: string;
   editable?: boolean;
 }
+
+export interface IUsers {
+  list: Array<IUsersItem>;
+  pagination: Pagination;
+}
+
+export interface IUsersItem {
+  id: number;
+  role: string;
+  role_id: number;
+  role_name: string;
+  create_time: string;
+  update_time: string;
+  user: string;
+}
+

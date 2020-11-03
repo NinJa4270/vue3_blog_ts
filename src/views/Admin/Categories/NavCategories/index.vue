@@ -99,7 +99,7 @@
 <script lang="ts">
 import { defineComponent, reactive, Ref, ref, toRefs } from "vue";
 import { INav, INavItem, Order } from "@/types/getData";
-import { IdialogConfig, INavForm, ISelectItem } from "@/types/category";
+import { IDialogConfig, INavForm, ISelectItem } from "@/types/category";
 import useGetNav from "@/hooks/GetData/useGetNav";
 import api from "@/utils/api";
 import server from "@/utils/axios";
@@ -108,7 +108,7 @@ export default defineComponent({
   name: "NavCategories",
   setup() {
     const { navList, getNavData } = useGetNav(Order.positive);
-    let dialogConfig = reactive<IdialogConfig>({
+    let dialogConfig = reactive<IDialogConfig>({
       visible: false,
       title: "",
       id: 0,

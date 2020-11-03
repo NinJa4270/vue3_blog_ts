@@ -17,7 +17,7 @@
     </div>
     <div class="table">
       <a-table
-        :data-source="articlesList.list"
+        :data-source="articles.list"
         rowKey="id"
         bordered
         :pagination="false"
@@ -63,8 +63,8 @@
       </a-table>
       <div class="paging">
         <a-pagination
-          :total="articlesList.pagination.total"
-          :showTotal="() => `Total ${articlesList.pagination.total}`"
+          :total="articles.pagination.total"
+          :showTotal="() => `Total ${articles.pagination.total}`"
           show-quick-jumper
           @change="jump"
         />
@@ -90,7 +90,7 @@ export default defineComponent({
     EditOutlined,
   },
   setup() {
-    const { articlesList, getArtCateData  } = useGetArtCate()
+    const { articles, getArtCateData  } = useGetArtCate()
     const addData = reactive<IAddConfig>({
       newValue: "",
       disabled: true,
@@ -142,7 +142,7 @@ export default defineComponent({
     };
 
     return {
-      articlesList,
+      articles,
       jump,
       edit,
       check,
