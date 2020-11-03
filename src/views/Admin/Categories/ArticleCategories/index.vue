@@ -77,9 +77,9 @@
 import { defineComponent, reactive, ref, toRefs, watch, watchEffect } from "vue";
 import server from "@/utils/axios";
 import { useForm } from "@ant-design-vue/use";
-import useGetData from "./ts/useGetData";
-import { ArtCategoryArr } from "./ts/types";
+import { IArtCateItem } from "@/types/getData";
 import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
+import useGetArtCate from '@/hooks/GetData/useGetArtCate'
 import api from '@/utils/api'
 export default defineComponent({
   name: "ArticleCategories",
@@ -88,7 +88,7 @@ export default defineComponent({
     EditOutlined,
   },
   setup() {
-    const { articlesList, getData } = useGetData();
+    const { articlesList, getArtCateData  } = useGetArtCate()
     const addData = reactive({
       newValue: "",
       disabled: true,
@@ -111,12 +111,12 @@ export default defineComponent({
       jump(1)
     };
     const jump = (curr: number) => {
-      getData(curr);
+      getArtCateData(curr);
     };
-    const edit = (record: ArtCategoryArr) => {
+    const edit = (record: IArtCateItem) => {
       record.editable = true;
     };
-    const check = async (record: ArtCategoryArr) => {
+    const check = async (record: IArtCateItem) => {
       record.editable = false;
       await server.request({
         url: "/api/editArt",
@@ -128,7 +128,7 @@ export default defineComponent({
       });
       jump(1);
     };
-    const remove = async (record: ArtCategoryArr) => {
+    const remove = async (record: IArtCateItem) => {
       await server.request({
         url: api.deleteArt,
         method: "post",

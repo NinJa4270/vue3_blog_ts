@@ -13,7 +13,6 @@ export default function UseGetNav(order:Order): IUseGetNav {
   let navList: INav = reactive({ list: [] });
 
   async function getNavData(): Promise<void> {
-    navList.list = [];
     let data = {};
     if (getStorage("userInfo")) {
       data = getStorage("userInfo");
@@ -25,9 +24,9 @@ export default function UseGetNav(order:Order): IUseGetNav {
     });
     if (res.data.code === 1000) {
       if(order === 0){
-        navList.list = res.data.data
+        navList.list = res.data.data || []
       }else if (order === 1){
-        navList.list = res.data.data.reverse()
+        navList.list = res.data.data.reverse() || []
       }
     }
   }

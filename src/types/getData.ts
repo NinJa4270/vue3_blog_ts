@@ -1,6 +1,12 @@
+export interface Pagination {
+  total?: number;
+  hasNextPage?: boolean;
+  totalPage?: number;
+}
+
 export enum Order {
   positive,
-  reverse
+  reverse,
 }
 
 export interface INav {
@@ -16,4 +22,17 @@ export interface INavItem {
   create_time: string;
   update_time: string;
   children?: Array<INavItem>;
+}
+
+export interface IArtCate {
+  list: Array<IArtCateItem>;
+  pagination: Pagination;
+}
+
+export interface IArtCateItem {
+  id: number;
+  name: string;
+  create_time: string;
+  update_time: string;
+  editable?: boolean;
 }
