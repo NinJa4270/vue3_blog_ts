@@ -10,7 +10,11 @@ export interface INavForm {
   role_id: number;
 }
 export interface ISelectItem {
-  value:number;
-  label:string;
+  value: number;
+  label: string;
 }
 
+export interface IAddConfig {
+  newValue: string;
+  disabled: boolean;
+}

@@ -74,13 +74,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs, watch, watchEffect } from "vue";
-import server from "@/utils/axios";
-import { useForm } from "@ant-design-vue/use";
-import { IArtCateItem } from "@/types/getData";
-import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
-import useGetArtCate from '@/hooks/GetData/useGetArtCate'
+import { defineComponent, reactive, toRefs, watch } from "vue";
 import api from '@/utils/api'
+import server from "@/utils/axios";
+import { CheckOutlined, EditOutlined } from "@ant-design/icons-vue";
+import { IArtCateItem } from "@/types/getData";
+import { IAddConfig } from '@/types/category'
+import useGetArtCate from '@/hooks/GetData/useGetArtCate'
+
+
 export default defineComponent({
   name: "ArticleCategories",
   components: {
@@ -89,7 +91,7 @@ export default defineComponent({
   },
   setup() {
     const { articlesList, getArtCateData  } = useGetArtCate()
-    const addData = reactive({
+    const addData = reactive<IAddConfig>({
       newValue: "",
       disabled: true,
     });
@@ -100,7 +102,7 @@ export default defineComponent({
         addData.disabled = false
       }
     })
-    const add = async () => {
+    const add = async ():Promise<void> => {
       await server.request({
         url: api.addArt,
         method: "post",
@@ -110,13 +112,13 @@ export default defineComponent({
       });
       jump(1)
     };
-    const jump = (curr: number) => {
+    const jump = (curr: number):void => {
       getArtCateData(curr);
     };
-    const edit = (record: IArtCateItem) => {
+    const edit = (record: IArtCateItem):void => {
       record.editable = true;
     };
-    const check = async (record: IArtCateItem) => {
+    const check = async (record: IArtCateItem):Promise<void> => {
       record.editable = false;
       await server.request({
         url: "/api/editArt",
@@ -128,7 +130,7 @@ export default defineComponent({
       });
       jump(1);
     };
-    const remove = async (record: IArtCateItem) => {
+    const remove = async (record: IArtCateItem):Promise<void> => {
       await server.request({
         url: api.deleteArt,
         method: "post",
