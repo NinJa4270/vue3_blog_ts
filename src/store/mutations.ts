@@ -19,5 +19,6 @@ export default {
   },
   [SET_TOKEN](state: IState, token: string): void {
     state.token = token;
+    setStorage("token", token);
   },
 };

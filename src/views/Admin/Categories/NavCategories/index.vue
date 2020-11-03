@@ -97,15 +97,15 @@
 
 <script lang="ts">
 import { defineComponent, reactive, Ref, ref } from "vue";
-import useGetData from "./ts/useGetData";
+import useGetNav from '@/hooks/GetData/useGetNav'
 import server from "@/utils/axios";
-import { INav, INavItem } from "@/types/getData";
+import { INav, INavItem, Order } from "@/types/getData";
 import { useForm } from "@ant-design-vue/use";
 import api from '@/utils/api'
 export default defineComponent({
   name: "NavCategories",
   setup() {
-    let { navList, getNav } = useGetData();
+    const { navList, getNavData } = useGetNav(Order.positive);
     const dialogConfig = reactive({
       visible: false,
       title: "",
@@ -153,7 +153,7 @@ export default defineComponent({
         method: "post",
         data: { id: item.id },
       });
-      getNav();
+      getNavData();
     };
 
     const edit = (item: INavItem) => {
@@ -184,7 +184,7 @@ export default defineComponent({
           data: { ...form },
         });
       }
-      getNav();
+      getNavData();
       dialogConfig.visible = false;
     };
 

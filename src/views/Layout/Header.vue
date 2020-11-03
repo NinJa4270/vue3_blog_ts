@@ -65,7 +65,7 @@ export default defineComponent({
     LogoutOutlined,
   },
   setup() {
-    const { navList, getNavData } = useGetNav();
+    const { navList, getNavData } = useGetNav(1);
     const router: Router = useRouter();
     const store: Store<any> = useStore();
     const login = (): void => {

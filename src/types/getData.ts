@@ -1,3 +1,8 @@
+export enum Order {
+  positive,
+  reverse
+}
+
 export interface INav {
   list?: Array<INavItem>;
 }
