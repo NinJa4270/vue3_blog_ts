@@ -98,8 +98,8 @@
 <script lang="ts">
 import { defineComponent, reactive, Ref, ref } from "vue";
 import useGetData from "./ts/useGetData";
-import { NavList, NavListArr } from "@/views/Layout/ts/types";
 import server from "@/utils/axios";
+import { INav, INavItem } from "@/types/getData";
 import { useForm } from "@ant-design-vue/use";
 import api from '@/utils/api'
 export default defineComponent({
@@ -128,7 +128,7 @@ export default defineComponent({
       { value: 0, label: "普通权限" },
       { value: 1, label: "Admin权限" },
     ]);
-    const add = (item: NavListArr, type: number) => {
+    const add = (item: INavItem, type: number) => {
       resetFields();
       dialogConfig.title = "增加导航分类";
       dialogConfig.visible = true;
@@ -147,7 +147,7 @@ export default defineComponent({
       }
     };
 
-    const remove = async (item: NavListArr) => {
+    const remove = async (item: INavItem) => {
       let { data: res } = await server.request({
         url: api.deleteNav,
         method: "post",
@@ -156,7 +156,7 @@ export default defineComponent({
       getNav();
     };
 
-    const edit = (item: NavListArr) => {
+    const edit = (item: INavItem) => {
       resetFields();
       dialogConfig.title = "修改导航分类";
       dialogConfig.visible = true;

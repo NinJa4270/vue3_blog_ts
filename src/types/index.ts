@@ -33,6 +33,7 @@ export interface Category {
   value?: number;
   label?: string;
 }
+
 export interface Pagination {
   total?: number;
   hasNextPage?: boolean;

@@ -29,7 +29,9 @@
       <div class="user-info" v-else>
         <a-popover class="user-box">
           <template v-slot:content>
-            <span @click="goCenter" style="cursor: pointer;">个人中心</span>
+            <span @click="goTo('./center')" style="cursor: pointer;"
+              >个人中心</span
+            >
           </template>
           <img
             class="avatar"
@@ -48,11 +50,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { LogoutOutlined } from "@ant-design/icons-vue";
-import useNav from "./ts/useNav";
-import useBtn from "./ts/useBtn";
+import useGetNav from "@/hooks/GetData/useGetNav";
 import Menu from "@/components/Menu.vue";
+import { Router, useRouter } from "vue-router";
+import { Store, useStore } from "vuex";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "Header",
@@ -61,17 +65,37 @@ export default defineComponent({
     LogoutOutlined,
   },
   setup() {
-    const { navList, getNav } = useNav();
-    const { login, logout, goCenter, store } = useBtn(getNav);
+    const { navList, getNavData } = useGetNav();
+    const router: Router = useRouter();
+    const store: Store<any> = useStore();
+    const login = (): void => {
+      goTo("./login");
+    };
+    const logout = (): void => {
+      message.success("登出成功");
+      store.dispatch("SET_USERINFO");
+      goTo("./main");
+    };
+    const goTo = (url: string): void => {
+      router.push(url);
+    };
     const logo = ref(require("../../assets/img/logo.jpg"));
-    const userInfo = computed(() => store.getters.GET_USERINFO);
-    const isLogin = computed(() =>store.getters.GET_ISLOGING);
+    const userInfo = ref(computed(() => store.getters.GET_USERINFO));
+    const isLogin = ref(computed(() => store.getters.GET_ISLOGING));
+    watch(
+      () => {
+        return isLogin.value;
+      },
+      (value) => {
+        getNavData();
+      }
+    );
     return {
       navList,
       logo,
       login,
       logout,
-      goCenter,
+      goTo,
       isLogin,
       userInfo,
     };

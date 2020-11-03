@@ -78,7 +78,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from "vue";
-import useRegSubmit from "./ts/useRegSubmit";
 import useCode from "@/hooks/Login/useCode";
 import { IBtnStatus, IRegisterForm } from "@/types/login";
 import useValidator from "@/hooks/Login/useValidator";

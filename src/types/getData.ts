@@ -1,7 +1,8 @@
-export interface NavList {
-  list?: NavListArr[];
+export interface INav {
+  list?: Array<INavItem>;
 }
-export interface NavListArr {
+
+export interface INavItem {
   id: number;
   name: string;
   path: string;
@@ -9,5 +10,5 @@ export interface NavListArr {
   role_id: number;
   create_time: string;
   update_time: string;
-  children?: NavListArr[];
+  children?: Array<INavItem>;
 }
