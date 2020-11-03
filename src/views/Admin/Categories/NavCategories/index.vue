@@ -6,7 +6,7 @@
 <template>
   <div class="nav-categories-wrap">
     <div class="table">
-      <a-table :data-source="navList.list" rowKey="id" bordered>
+      <a-table :data-source="navList.list" :pagination="false" rowKey="id" bordered>
         <a-table-column key="id" title="id" data-index="id" :width="200" />
         <a-table-column
           key="name"
@@ -55,17 +55,18 @@
         </a-table-column>
       </a-table>
     </div>
+
     <a-modal
       :title="dialogConfig.title"
       v-model:visible="dialogConfig.visible"
       @ok="submit"
     >
-      <a-form>
-        <a-form-item label="导航名称" required>
-          <a-input v-model:value="form.name" />
+      <a-form ref="ruleForm" :model="formData" :rules="navRules">
+        <a-form-item label="导航名称" name="name" required has-feedback>
+          <a-input v-model:value="formData.name" />
         </a-form-item>
-        <a-form-item label="导航级别" required>
-          <a-select v-model:value="form.pid">
+        <a-form-item label="导航级别" name="pid" required has-feedback>
+          <a-select v-model:value="formData.pid">
             <a-select-option
               :value="item.value"
               v-for="(item, index) in pidSelect"
@@ -76,11 +77,11 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="导航路由" required>
-          <a-input v-model:value="form.path" :disabled="disabled" />
+        <a-form-item label="导航路由" name="path" required has-feedback>
+          <a-input v-model:value="formData.path" :disabled="disabled" />
         </a-form-item>
-        <a-form-item label="权限等级" required>
-          <a-select v-model:value="form.role_id">
+        <a-form-item label="权限等级" name="role_id" required has-feedback>
+          <a-select v-model:value="formData.role_id">
             <a-select-option
               :value="item.value"
               v-for="(item, index) in roleSelect"
@@ -96,58 +97,68 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref } from "vue";
-import useGetNav from '@/hooks/GetData/useGetNav'
-import server from "@/utils/axios";
+import { defineComponent, reactive, Ref, ref, toRefs } from "vue";
 import { INav, INavItem, Order } from "@/types/getData";
-import { useForm } from "@ant-design-vue/use";
-import api from '@/utils/api'
+import { IdialogConfig, INavForm, ISelectItem } from "@/types/category";
+import useGetNav from "@/hooks/GetData/useGetNav";
+import api from "@/utils/api";
+import server from "@/utils/axios";
+
 export default defineComponent({
   name: "NavCategories",
   setup() {
     const { navList, getNavData } = useGetNav(Order.positive);
-    const dialogConfig = reactive({
+    let dialogConfig = reactive<IdialogConfig>({
       visible: false,
       title: "",
       id: 0,
     });
-    const form = reactive({
+    let formData = reactive<INavForm>({
       name: "",
       pid: 0,
       path: "",
       role_id: 0,
     });
-    const rulesRef = reactive({});
-    const { resetFields, validate, validateInfos } = useForm(form, rulesRef);
-    const disabled = ref(false);
-    const pidSelect = reactive([
+    let pidSelect = reactive<ISelectItem[]>([
       { value: 0, label: "一级导航" },
       { value: 1, label: "二级导航" },
     ]);
-    const roleSelect = reactive([
+    let roleSelect = reactive<ISelectItem[]>([
       { value: 0, label: "普通权限" },
       { value: 1, label: "Admin权限" },
     ]);
+    let disabled = ref<boolean>(false);
+    let ruleForm = ref<string | null>(null);
+
+    const navRules = reactive({
+      name: [{ required: true, message: "请输入导航名", trigger: "change" }],
+      pid: [{ required: true, message: "请选择导航级别", trigger: "change" }],
+      path: [{ required: true, message: "请输入导航路由", trigger: "change" }],
+      role_id: [
+        { required: true, message: "请选择导航权限", trigger: "change" },
+      ],
+    });
+
     const add = (item: INavItem, type: number) => {
-      resetFields();
+      ruleForm.value && (ruleForm as Ref).value.resetFields();
       dialogConfig.title = "增加导航分类";
       dialogConfig.visible = true;
       if (type === 1) {
-        form.path = "-";
+        formData.path = "-";
         disabled.value = true;
       } else if (type === 2) {
         if (item.pid === 0) {
           pidSelect[1].value = item.id;
-          form.pid = item.id;
+          formData.pid = item.id;
         } else {
           pidSelect[1].value = item.pid;
-          form.pid = item.pid;
+          formData.pid = item.pid;
         }
         disabled.value = false;
       }
     };
 
-    const remove = async (item: INavItem) => {
+    const remove = async (item: INavItem): Promise<void> => {
       let { data: res } = await server.request({
         url: api.deleteNav,
         method: "post",
@@ -156,32 +167,32 @@ export default defineComponent({
       getNavData();
     };
 
-    const edit = (item: INavItem) => {
-      resetFields();
+    const edit = (item: INavItem): void => {
+      ruleForm.value && (ruleForm as Ref).value.resetFields();
       dialogConfig.title = "修改导航分类";
       dialogConfig.visible = true;
       dialogConfig.id = item.id;
       if (item.pid !== 0) {
         pidSelect[1].value = item.pid;
       }
-      form.pid = item.pid;
-      form.name = item.name;
-      form.path = item.path;
-      form.role_id = item.role_id;
+      formData.pid = item.pid;
+      formData.name = item.name;
+      formData.path = item.path;
+      formData.role_id = item.role_id;
     };
 
-    const submit = async () => {
+    const submit = async (): Promise<void> => {
       if (dialogConfig.title === "修改导航分类") {
         let { data: res } = await server.request({
           url: api.editNav,
           method: "post",
-          data: { id: dialogConfig.id, ...form },
+          data: { id: dialogConfig.id, ...formData },
         });
       } else if (dialogConfig.title === "增加导航分类") {
         let { data: res } = await server.request({
           url: api.addNav,
           method: "post",
-          data: { ...form },
+          data: { ...formData },
         });
       }
       getNavData();
@@ -189,16 +200,18 @@ export default defineComponent({
     };
 
     return {
+      ruleForm,
       navList,
-      add,
-      remove,
       dialogConfig,
-      form,
+      formData,
+      navRules,
       pidSelect,
       roleSelect,
-      submit,
       disabled,
+      add,
+      remove,
       edit,
+      submit,
     };
   },
 });

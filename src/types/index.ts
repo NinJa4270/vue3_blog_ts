@@ -20,6 +20,7 @@ export interface DateFmt {
   "q+"?: number;
   S?: number;
 }
+
 export interface Categories {
   list: Category[];
   pagination: Pagination;

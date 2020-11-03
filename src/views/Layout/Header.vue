@@ -57,6 +57,7 @@ import Menu from "@/components/Menu.vue";
 import { Router, useRouter } from "vue-router";
 import { Store, useStore } from "vuex";
 import { message } from "ant-design-vue";
+import { Order } from '@/types/getData';
 
 export default defineComponent({
   name: "Header",
@@ -65,7 +66,7 @@ export default defineComponent({
     LogoutOutlined,
   },
   setup() {
-    const { navList, getNavData } = useGetNav(1);
+    const { navList, getNavData } = useGetNav(Order.reverse);
     const router: Router = useRouter();
     const store: Store<any> = useStore();
     const login = (): void => {
